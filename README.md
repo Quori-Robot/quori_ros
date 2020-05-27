@@ -1,6 +1,6 @@
 # quori_ros
 
-This catkin workspace contains all of the ROS packages necessary for full operation of the Quori robot platform from UPENN.
+This catkin workspace contains all of the ROS packages necessary for full operation of the Quori robot platform from UPenn.
 
 ## External Dependencies
 
