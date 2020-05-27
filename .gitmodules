@@ -1,0 +1,3 @@
+[submodule "src/respeaker_ros"]
+	path = src/respeaker_ros
+	url = https://github.com/furushchev/respeaker_ros.git
