@@ -4,3 +4,12 @@
 [submodule "src/ros_astra_camera"]
 	path = src/ros_astra_camera
 	url = https://github.com/orbbec/ros_astra_camera
+[submodule "src/rplidar_ros"]
+	path = src/rplidar_ros
+	url = https://github.com/Slamtec/rplidar_ros
+[submodule "src/laser_filters"]
+	path = src/laser_filters
+	url = https://github.com/ros-perception/laser_filters.git
+[submodule "src/laser_pipeline"]
+	path = src/laser_pipeline
+	url = https://github.com/ros-perception/laser_pipeline.git
