@@ -1,0 +1,30 @@
+<launch>
+  <param name="robot_description" textfile="$(find quori_description)/urdf/quori.urdf" />
+  <param name="robot_descripion" textfile="$(find quori_description)/urdf/quori.urdf" />
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find quori_controller)/config/quori_control_holo.yaml" command="load"/>
+
+  <node name="quori_controller" pkg="quori_controller" type="node" ns="/quori" output="screen" respawn="false" required="true">
+    <rosparam file="$(find quori_controller)/config/quori_controller_params.yaml" command="load"/>
+  </node>
+
+  <!-- load the controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/quori" args="joint_trajectory_controller joint_state_controller base_controller"/>
+
+  
+  <node name="quori_joint_states_publisher" pkg="quori_joint_states_publisher" type="node"
+    respawn="false" output="screen">
+    
+  </node>
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+  </node>
+
+  <node name="base_serial_node" pkg="rosserial_python" type="serial_node.py" output="screen" respawn="true" >
+    <param name="port" value="/dev/quori/base" />
+    <param name="baud" value="115200" />
+  </node>
+
+</launch>

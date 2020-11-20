@@ -10,6 +10,3 @@
 [submodule "src/laser_filters"]
 	path = src/laser_filters
 	url = https://github.com/ros-perception/laser_filters.git
-[submodule "src/laser_pipeline"]
-	path = src/laser_pipeline
-	url = https://github.com/ros-perception/laser_pipeline.git

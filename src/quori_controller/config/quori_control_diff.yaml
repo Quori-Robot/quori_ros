@@ -1,0 +1,30 @@
+quori:
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50  
+
+  joint_trajectory_controller:
+    type: position_controllers/JointTrajectoryController
+    joints:
+      - right_arm_r1
+      - right_arm_r2
+      - left_arm_r1
+      - left_arm_r2
+      - waist_hinge
+
+  base_controller:
+    type: diff_drive_controller/DiffDriveController
+    left_wheel: 'base_left'
+    right_wheel: 'base_right'
+    enable_odom_tf: true
+    publish_rate: 50
+    pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
+    twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
+    cmd_vel_timeout: 0.25
+    wheel_separation: 0.2475
+    open_loop: false
+    wheel_radius: 0.07512
+    wheel_separation_multiplier: 1.0
+    wheel_radius_multiplier    : 1.0
+
+      
