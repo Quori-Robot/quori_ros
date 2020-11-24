@@ -12,7 +12,6 @@ QuoriHolonomicDriveController::QuoriHolonomicDriveController()
   , enable_odom_tf_(true)
   , odom_(Odom::zero(ros::Time::now(), 0.0, 0.0))
   , cmd_vel_timeout_(0.5)
-  , virtual_heading_(0.0)
 {
 
 }
@@ -45,7 +44,8 @@ bool QuoriHolonomicDriveController::init(hardware_interface::VelocityJointInterf
   // diff drive or holonomic drive API. > 0.5 means holonomic mode.
   mode_joint_ = hw->getHandle("base_mode");
 
-  
+  marker_pub_ = controller_nh.advertise<visualization_msgs::MarkerArray>("/quori/markers", 100);
+
 
   sub_command_ = controller_nh.subscribe("cmd_vel", 1, &QuoriHolonomicDriveController::cmdVelCallback, this);
 }
@@ -58,24 +58,35 @@ void QuoriHolonomicDriveController::update(const ros::Time &time, const ros::Dur
   odom_ = odom_.update(time, left_joint_.getVelocity(), right_joint_.getVelocity(), turret_joint_.getPosition());
   // std::cout << odom_ << std::endl;
 
-  const geometry_msgs::Quaternion orientation(tf::createQuaternionMsgFromYaw(odom_.getHeading()));
+  if (!angle_offset_)
+  {
+    angle_offset_ = turret_joint_.getPosition();
+  }
+  const double heading = -odom_.getHeading() + turret_joint_.getPosition();
+  
+  const geometry_msgs::Quaternion orientation(tf::createQuaternionMsgFromYaw(-odom_.getHeading()));
 
   if (last_state_publish_time_ + publish_period_ < time)
   {
     last_state_publish_time_ += publish_period_;
     // Compute and store orientation info
     
+    const double mapped_x = odom_.getX();
+    const double mapped_y = odom_.getY();
+    const double x = mapped_x * cos(heading) - mapped_y * sin(heading);
+    const double y = mapped_x * sin(heading) + mapped_y * cos(heading);
+    
 
     // Populate odom message and publish
     if (odom_pub_->trylock())
     {
       odom_pub_->msg_.header.stamp = time;
-      odom_pub_->msg_.pose.pose.position.x = odom_.getX();
+      odom_pub_->msg_.pose.pose.position.x = -odom_.getX();
       odom_pub_->msg_.pose.pose.position.y = -odom_.getY();
       odom_pub_->msg_.pose.pose.orientation = orientation;
-      odom_pub_->msg_.twist.twist.linear.x  = odom_.getVelX();
-      odom_pub_->msg_.twist.twist.linear.y  = odom_.getVelY();
-      odom_pub_->msg_.twist.twist.angular.z = odom_.getVelHeading();
+      odom_pub_->msg_.twist.twist.linear.x  = -odom_.getVelX();
+      odom_pub_->msg_.twist.twist.linear.y  = -odom_.getVelY();
+      odom_pub_->msg_.twist.twist.angular.z = -odom_.getVelHeading();
       odom_pub_->unlockAndPublish();
     }
 
@@ -84,7 +95,7 @@ void QuoriHolonomicDriveController::update(const ros::Time &time, const ros::Dur
     {
       geometry_msgs::TransformStamped& odom_frame = tf_odom_pub_->msg_.transforms[0];
       odom_frame.header.stamp = time;
-      odom_frame.transform.translation.x = odom_.getX();
+      odom_frame.transform.translation.x = -odom_.getX();
       odom_frame.transform.translation.y = -odom_.getY();
       odom_frame.transform.rotation = orientation;
       // std::cout << "rotation " << tf::getYaw(orientation) << std::endl;
@@ -108,7 +119,6 @@ void QuoriHolonomicDriveController::update(const ros::Time &time, const ros::Dur
   // Limit velocities and accelerations:
   const double cmd_dt(period.toSec());
 
-  virtual_heading_ += cmd_dt * curr_cmd.ang;
 
   // limiter_lin_.limit(curr_cmd.lin, last0_cmd_.lin, last1_cmd_.lin, cmd_dt);
   // limiter_ang_.limit(curr_cmd.ang, last0_cmd_.ang, last1_cmd_.ang, cmd_dt);
@@ -127,14 +137,35 @@ void QuoriHolonomicDriveController::update(const ros::Time &time, const ros::Dur
 
   // The X and Y axes represented by the x_joint_ and y_joint_ do not rotate
   // with the base_link. We map the linear X vel and linear Y vel to these axes.
-  const double heading = virtual_heading_;
+  
+  
+
+  
   const double linear_x = curr_cmd.lin_x;
   const double linear_y = curr_cmd.lin_y;
-  const double mapped_linear_x = linear_x * cos(heading) - linear_y * sin(heading);
-  const double mapped_linear_y = linear_x * sin(heading) + linear_y * cos(heading);
+  const double mapped_linear_x = linear_x * cos(-heading) - linear_y * sin(-heading);
+  const double mapped_linear_y = linear_x * sin(-heading) + linear_y * cos(-heading);
+
+  visualization_msgs::MarkerArray markers;
+  visualization_msgs::Marker vec;
+  vec.header.stamp = ros::Time::now();
+  vec.header.frame_id = "map";
+  vec.ns = "quori";
+  vec.id = 0;
+  vec.type = visualization_msgs::Marker::ARROW;
+  vec.action = visualization_msgs::Marker::ADD;
+  vec.pose.orientation = tf::createQuaternionMsgFromYaw(atan2(mapped_linear_y, mapped_linear_x));
+  vec.color.r = 1.0;
+  vec.scale.x = vec.scale.y = vec.scale.z = 1;
+
+  markers.markers.push_back(vec);
+
+  marker_pub_.publish(markers);
 
   std::cout
-    << "heading: " << heading << ":" << std::endl
+    << "heading: " << (heading / M_PI * 180) << ":" << std::endl
+    << "  odom heading: " << (-odom_.getHeading() / M_PI * 180) << std::endl
+    << "  turret angle: " << (turret_joint_.getPosition() / M_PI * 180) << std::endl
     << "  x: " << linear_x << " -> " << mapped_linear_x << std::endl
     << "  y: " << linear_y << " -> " << mapped_linear_y << std::endl;
 
@@ -159,7 +190,6 @@ void QuoriHolonomicDriveController::starting(const ros::Time &time)
   time_previous_ = time;
 
   odom_ = Odom::zero(time, wheel_separation_, wheel_radius_);
-  virtual_heading_ = turret_joint_.getPosition();
 }
 
 void QuoriHolonomicDriveController::stopping(const ros::Time &time)

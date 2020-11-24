@@ -9,10 +9,13 @@
 #include <hardware_interface/joint_command_interface.h>
 #include <memory>
 #include <nav_msgs/Odometry.h>
+#include <visualization_msgs/MarkerArray.h>
 #include <realtime_tools/realtime_buffer.h>
 #include <realtime_tools/realtime_publisher.h>
 #include <tf/tfMessage.h>
 #include "odom.hpp"
+
+#include <boost/optional.hpp>
 
 namespace quori_holonomic_drive_controller
 {
@@ -37,8 +40,11 @@ namespace quori_holonomic_drive_controller
     bool open_loop_;
     std::shared_ptr<realtime_tools::RealtimePublisher<nav_msgs::Odometry> > odom_pub_;
     std::shared_ptr<realtime_tools::RealtimePublisher<tf::tfMessage> > tf_odom_pub_;
+    ros::Publisher marker_pub_;
     Odometry odometry_;
     Odom odom_;
+
+    boost::optional<double> angle_offset_;
 
 
     // Command
@@ -69,7 +75,6 @@ namespace quori_holonomic_drive_controller
     // Controller state requirements
     ros::Time time_previous_;
 
-    double virtual_heading_;
 
     /// Previous velocities from the encoders:
     double vel_x_previous_;
