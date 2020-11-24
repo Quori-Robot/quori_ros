@@ -1,4 +1,5 @@
 #include "quori_holonomic_drive_controller/quori_holonomic_drive_controller.hpp"
+#include "quori_holonomic_drive_controller/holonomic.hpp"
 
 #include <pluginlib/class_list_macros.hpp>
 #include <tf/transform_datatypes.h>
@@ -28,21 +29,18 @@ bool QuoriHolonomicDriveController::init(hardware_interface::VelocityJointInterf
   controller_nh.param("base_frame_id", base_frame_id_, base_frame_id_);
   controller_nh.param("cmd_vel_timeout", cmd_vel_timeout_, cmd_vel_timeout_);
 
-  controller_nh.param("wheel_separation", wheel_separation_, 0.0);
-  controller_nh.param("wheel_radius", wheel_radius_, 0.0);
+  controller_nh.param("max_motor_left_vel", holonomic_params_.max_motor_left_vel, 0.6);
+  controller_nh.param("max_motor_right_vel", holonomic_params_.max_motor_right_vel, 0.6);
+  controller_nh.param("max_motor_turret_vel", holonomic_params_.max_motor_turret_vel, 200.0 / 180.0 * M_PI);
+
+  controller_nh.param("wheel_separation", holonomic_params_.wheel_distance, 0.12284075);
+  controller_nh.param("wheel_radius", holonomic_params_.wheel_radius, 0.1524 / 2.0);
 
   setOdomPubFields(root_nh, controller_nh);
 
   left_joint_ = hw->getHandle("base_left");
   right_joint_ = hw->getHandle("base_right");
   turret_joint_ = hw->getHandle("base_turret");
-  x_joint_ = hw->getHandle("base_x");
-  y_joint_ = hw->getHandle("base_y");
-  angle_joint_ = hw->getHandle("base_angle");
-
-  // This is a hack that allows us to notify the joint interface whether to use the
-  // diff drive or holonomic drive API. > 0.5 means holonomic mode.
-  mode_joint_ = hw->getHandle("base_mode");
 
   marker_pub_ = controller_nh.advertise<visualization_msgs::MarkerArray>("/quori/markers", 100);
 
@@ -162,17 +160,28 @@ void QuoriHolonomicDriveController::update(const ros::Time &time, const ros::Dur
 
   marker_pub_.publish(markers);
 
-  std::cout
-    << "heading: " << (heading / M_PI * 180) << ":" << std::endl
-    << "  odom heading: " << (-odom_.getHeading() / M_PI * 180) << std::endl
-    << "  turret angle: " << (turret_joint_.getPosition() / M_PI * 180) << std::endl
-    << "  x: " << linear_x << " -> " << mapped_linear_x << std::endl
-    << "  y: " << linear_y << " -> " << mapped_linear_y << std::endl;
+  // std::cout
+  //   << "heading: " << (heading / M_PI * 180) << ":" << std::endl
+  //   << "  odom heading: " << (-odom_.getHeading() / M_PI * 180) << std::endl
+  //   << "  turret angle: " << (turret_joint_.getPosition() / M_PI * 180) << std::endl
+  //   << "  x: " << linear_x << " -> " << mapped_linear_x << std::endl
+  //   << "  y: " << linear_y << " -> " << mapped_linear_y << std::endl;
 
-  x_joint_.setCommand(mapped_linear_x);
-  y_joint_.setCommand(mapped_linear_y);
+  HolonomicCommand command = {
+    .lin_x_vel = linear_x,
+    .lin_y_vel = linear_y,
+    .ang_z_vel = curr_cmd.ang,
+  };
 
-  angle_joint_.setCommand(curr_cmd.ang);
+  std::cout << command << std::endl;
+
+  const DiffDriveCommand diff_drive_cmd = compute_ramsis_jacobian(command, -(turret_joint_.getPosition() - M_PI / 4), holonomic_params_);
+  std::cout << diff_drive_cmd << std::endl;
+
+
+  left_joint_.setCommand(diff_drive_cmd.motor_left_vel);
+  right_joint_.setCommand(diff_drive_cmd.motor_right_vel);
+  turret_joint_.setCommand(diff_drive_cmd.motor_turret_vel);
 
   // publishWheelData(time, period, curr_cmd, ws, lwr, rwr);
   time_previous_ = time;
@@ -182,26 +191,23 @@ void QuoriHolonomicDriveController::starting(const ros::Time &time)
 {
   brake();
 
-  // Going to holonomic drive mode
-  mode_joint_.setCommand(1.0);
-
   // Register starting time used to keep fixed rate
   last_state_publish_time_ = time;
   time_previous_ = time;
 
-  odom_ = Odom::zero(time, wheel_separation_, wheel_radius_);
+  odom_ = Odom::zero(time, holonomic_params_.wheel_distance, holonomic_params_.wheel_radius);
 }
 
 void QuoriHolonomicDriveController::stopping(const ros::Time &time)
 {
-  // Going back to diff drive mode
-  mode_joint_.setCommand(0.0);
+  brake();
 }
 
 void QuoriHolonomicDriveController::brake()
 {
-  x_joint_.setCommand(0.0);
-  y_joint_.setCommand(0.0);
+  left_joint_.setCommand(0.0);
+  right_joint_.setCommand(0.0);
+  turret_joint_.setCommand(0.0);
 }
 
 void QuoriHolonomicDriveController::setOdomPubFields(ros::NodeHandle &root_nh, ros::NodeHandle &controller_nh)

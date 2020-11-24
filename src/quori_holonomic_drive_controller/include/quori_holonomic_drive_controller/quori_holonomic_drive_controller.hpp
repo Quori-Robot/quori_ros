@@ -17,6 +17,8 @@
 
 #include <boost/optional.hpp>
 
+#include "holonomic.hpp"
+
 namespace quori_holonomic_drive_controller
 {
   class QuoriHolonomicDriveController : public controller_interface::Controller<hardware_interface::VelocityJointInterface>
@@ -67,10 +69,6 @@ namespace quori_holonomic_drive_controller
     hardware_interface::JointHandle left_joint_;
     hardware_interface::JointHandle right_joint_;
     hardware_interface::JointHandle turret_joint_;
-    hardware_interface::JointHandle x_joint_;
-    hardware_interface::JointHandle y_joint_;
-    hardware_interface::JointHandle angle_joint_;
-    hardware_interface::JointHandle mode_joint_;
 
     // Controller state requirements
     ros::Time time_previous_;
@@ -86,11 +84,7 @@ namespace quori_holonomic_drive_controller
     double vel_y_desired_previous_;
     double vel_angle_desired_previous_;
 
-    /// Wheel separation, wrt the midpoint of the wheel width:
-    double wheel_separation_;
-
-    /// Wheel radius (assuming it's the same for the left and right wheels):
-    double wheel_radius_;
+    HolonomicParams holonomic_params_;
 
     /// Timeout to consider cmd_vel commands old:
     double cmd_vel_timeout_;
