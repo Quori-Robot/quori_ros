@@ -11,13 +11,11 @@ jobs:
   build:
     runs-on: ubuntu-16.04
     steps:
-      - run: sudo apt-get install wget
-      - run: wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.1/clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04.tar.xz
-        working-directory: $GITHUB_WORKSPACE
-      - run: ls -a
-      - run: tar -xvf clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04.tar.xz
-        working-directory: $GITHUB_WORKSPACE
-      - run: ls -a llvm
+      - name: Install LLVM
+        run: |
+          sudo apt-get install wget
+          wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.1/clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04.tar.xz
+          tar -xvf clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04.tar.xz
       - uses: actions/checkout@v2
         with:
           path: quori_ros
