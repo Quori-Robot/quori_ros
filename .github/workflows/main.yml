@@ -15,24 +15,46 @@ jobs:
         run: |
           sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
           sudo ln -s /usr/lib/llvm-11/lib/libclang.so.1 /usr/lib/llvm-11/lib/libclang.so
-      - uses: actions/checkout@v2
+      - name: Install ROS
+        run: |
+          sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+          sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+          sudo apt-get update
+          sudo apt-get install ros-kinetic-ros-base
+      - name: Install Node.js
+        run: |
+          curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+      - name: Checkout quori_ros
+        uses: actions/checkout@v2
         with:
           path: quori_ros
-      - uses: actions/checkout@v2
+      - name: Checkout Drydoc
+        uses: actions/checkout@v2
         with:
           path: drydoc
           repository: semio-ai/drydoc
-      - uses: actions-rs/toolchain@v1
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - run: cargo build
+      - name: Build Drydoc Client
+        run: |
+          sudo npm install -g yarn
+          yarn install
+          yarn run build
+        working-directory: drydoc/client
+      - name: Build Drydoc CLI
+        run: cargo build
         env:
           LLVM_CONFIG_PATH: /usr/bin/llvm-config-11
           LIBCLANG_PATH: /usr/lib/llvm-11/lib
         working-directory: drydoc
-      - run: $GITHUB_WORKSPACE/drydoc/target/debug/drydoc gen
+      - name: Generate Documentation
+        run: $GITHUB_WORKSPACE/drydoc/target/debug/drydoc gen
         working-directory: quori_ros
-      - uses: peaceiris/actions-gh-pages@v3.7.3
+      - name: Publish Documentation
+        uses: peaceiris/actions-gh-pages@v3.7.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./quori_ros/html
