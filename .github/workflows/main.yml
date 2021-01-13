@@ -34,5 +34,5 @@ jobs:
         working-directory: quori_ros
       - uses: peaceiris/actions-gh-pages@v3.7.3
         with:
-          deploy_key: DEPLOY_KEY
-          publish_dir: html
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./quori_ros/html
