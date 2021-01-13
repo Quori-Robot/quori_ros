@@ -1,4 +1,0 @@
-<launch>
-  <node name="joy" pkg="joy" type="joy_node" output="screen" respawn="false" required="true" />
-  <node name="quori_teleop" pkg="quori_teleop" type="node" output="screen" respawn="false" required="true" />
-</launch>

@@ -1,9 +1,0 @@
-<library path="lib/libquori_holonomic_drive_controller">
-
-  <class name="quori_holonomic_drive_controller/QuoriHolonomicDriveController" type="quori_holonomic_drive_controller::QuoriHolonomicDriveController" base_class_type="controller_interface::ControllerBase">
-    <description>
-      A pass-through controller for Quori's base holonomic implementation
-    </description>
-  </class>
-
-</library>

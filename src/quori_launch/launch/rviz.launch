@@ -1,6 +1,0 @@
-<launch>
-  <arg name="gui" default="True" />
-  <param name="robot_description" textfile="$(find quori_description)/urdf/quori.urdf" />
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
-  <param name="use_gui" value="$(arg gui)"/>
-</launch>
