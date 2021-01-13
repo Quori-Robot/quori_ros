@@ -20,7 +20,4 @@ decl:
       uri: quori_holonomic_drive_controller/drydoc.yaml
     -
       type: import
-      uri: quori_holonomic_drive_controller/drydoc.yaml
-    -
-      type: import
       uri: astra_ros/drydoc.yaml
