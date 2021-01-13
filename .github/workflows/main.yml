@@ -14,6 +14,7 @@ jobs:
       - name: Install LLVM
         run: |
           sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+          sudo ln -s /usr/lib/llvm-11/lib/libclang.so.1 /usr/lib/llvm-11/lib/libclang.so
       - uses: actions/checkout@v2
         with:
           path: quori_ros
@@ -27,6 +28,7 @@ jobs:
       - run: cargo build
         env:
           LLVM_CONFIG_PATH: /usr/bin/llvm-config-11
+          LIBCLANG_PATH: /usr/lib/llvm-11/lib
         working-directory: drydoc
       - run: drydoc gen
         working-directory: quori_ros
