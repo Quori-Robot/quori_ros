@@ -1,0 +1,9 @@
+---
+type: unit
+id: quori_description
+name: quori_description
+rule:
+  name: copy
+  params:
+    path: README.md
+    name: quori_description

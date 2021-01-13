@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<launch>
-  <node name="spine_serial_node" pkg="rosserial_python" type="serial_node.py" output="screen" respawn="true" >
-    <param name="port" value="/dev/ttyACM2" />
-    <param name="baud" value="115200" />
-  </node>
-</launch>

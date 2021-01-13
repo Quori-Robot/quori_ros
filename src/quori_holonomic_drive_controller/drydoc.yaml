@@ -7,6 +7,7 @@ decl:
     name: copy
     params:
       path: readme.md
+      name: quori_holonomic_drive_controller
   children:
     -
       type: unit
@@ -16,3 +17,4 @@ decl:
         name: clang
         params:
           path: include
+          name: "C++ API"
