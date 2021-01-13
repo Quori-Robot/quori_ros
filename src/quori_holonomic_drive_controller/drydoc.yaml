@@ -18,3 +18,4 @@ decl:
         params:
           path: include
           name: "C++ API"
+          arguments: "-I/opt/ros/kinetic/include"

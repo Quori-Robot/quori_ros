@@ -25,6 +25,11 @@ jobs:
         run: |
           curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
           sudo apt-get install -y nodejs
+      - name: Install Astra SDK
+        run: |
+          wget http://dl.orbbec3d.com/dist/astra/v2.1.1/AstraSDK-v2.1.1-24f74b8b15-Ubuntu-x86_64.zip
+          unzip AstraSDK-v2.1.1-24f74b8b15-Ubuntu-x86_64.zip
+          tar -xf AstraSDK-v2.1.1-24f74b8b15-20200426T012828Z-Ubuntu16.04-x86_64.tar.gz
       - name: Checkout quori_ros
         uses: actions/checkout@v2
         with:
@@ -54,6 +59,8 @@ jobs:
       - name: Generate Documentation
         run: $GITHUB_WORKSPACE/drydoc/target/debug/drydoc gen
         working-directory: quori_ros
+        env:
+          ASTRA_ROOT: $GITHUB_WORKSPACE/AstraSDK-v2.1.1-24f74b8b15-20200426T012828Z-Ubuntu16.04-x86_64
       - name: Publish Documentation
         uses: peaceiris/actions-gh-pages@v3.7.3
         with:
