@@ -25,6 +25,8 @@ jobs:
         with:
           toolchain: stable
       - run: cargo build
+        env:
+          LLVM_CONFIG_PATH: /usr/bin/llvm-config-11
         working-directory: drydoc
       - run: drydoc gen
         working-directory: quori_ros
