@@ -12,8 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          path: quori_ros
       - uses: actions/checkout@v2
         with:
+          path: drydoc
           repository: semio-ai/drydoc
       - uses: actions-rs/toolchain@v1
         with:
