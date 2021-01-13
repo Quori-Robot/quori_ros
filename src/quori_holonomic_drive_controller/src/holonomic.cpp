@@ -36,6 +36,12 @@ HolonomicCommand quori_holonomic_drive_controller::limit_acceleration(const Holo
 
 DiffDriveCommand quori_holonomic_drive_controller::compute_ramsis_jacobian(const HolonomicCommand &command, double turret_pos, const HolonomicParams &params)
 {
+  const HolonomicCommand true_command = {
+    .lin_x_vel = command.lin_y_vel,
+    .lin_y_vel = command.lin_x_vel,
+    .ang_z_vel = command.ang_z_vel
+  };
+
   const double sint = sin(turret_pos);
   const double cost = cos(turret_pos);
   
@@ -45,11 +51,11 @@ DiffDriveCommand quori_holonomic_drive_controller::compute_ramsis_jacobian(const
   const double a_cos = params.wheel_distance * cost;
   
   const double wheel_distance_inv = 1.0 / params.wheel_distance;
-  const double output_m1 = (command.lin_x_vel * (-b_sin - a_cos) + command.lin_y_vel * (b_cos - a_sin)) * wheel_distance_inv;
-  const double output_m2 = (command.lin_x_vel * (-b_sin + a_cos) + command.lin_y_vel * (b_cos + a_sin)) * wheel_distance_inv;
+  const double output_m1 = (true_command.lin_x_vel * (-b_sin - a_cos) + true_command.lin_y_vel * (b_cos - a_sin)) * wheel_distance_inv;
+  const double output_m2 = (true_command.lin_x_vel * (-b_sin + a_cos) + true_command.lin_y_vel * (b_cos + a_sin)) * wheel_distance_inv;
 
   // Notice this is the negative of the listed jacobian. this is because the motor velocity is the negative of the turret velocity.
-  const double output_mt = (-command.lin_x_vel * cost - command.lin_y_vel * sint) * wheel_distance_inv - command.ang_z_vel; 
+  const double output_mt = (-true_command.lin_x_vel * cost - true_command.lin_y_vel * sint) * wheel_distance_inv - true_command.ang_z_vel;
 
   // Scale the velocities linearly if a maximuim was reached
   double scale = 1;
@@ -69,8 +75,6 @@ DiffDriveCommand quori_holonomic_drive_controller::compute_ramsis_jacobian(const
     scale = std::min(params.max_motor_right_vel / abs(output_m2), scale);
   }
 
-  std::cout << "scale: " << scale << std::endl;
-
   return {
     .motor_left_vel = scale * output_m1 / params.wheel_radius,
     .motor_right_vel = scale * output_m2 / params.wheel_radius,
@@ -82,7 +86,7 @@ std::ostream &operator <<(std::ostream &o, const quori_holonomic_drive_controlle
 {
   return o << "HolonomicParams {" << std::endl
     << "  wheel_distance: " << v.wheel_distance << " meters" << std::endl 
-    << "  wheel_radius: " << v.wheel_distance << " meters" << std::endl 
+    << "  wheel_radius: " << v.wheel_radius << " meters" << std::endl 
     << "  max_motor_turret_vel: " << v.max_motor_turret_vel << " rad/s" << std::endl 
     << "  max_motor_left_vel: " << v.max_motor_left_vel << " m/s" << std::endl 
     << "  max_motor_right_vel: " << v.max_motor_right_vel << " m/s" << std::endl

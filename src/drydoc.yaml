@@ -1,0 +1,16 @@
+---
+decl:
+  type: unit
+  id: packages
+  name: packages
+  rule:
+    name: copy
+    params:
+      path: readme.md
+  children:
+    -
+      type: import
+      uri: quori_launch/drydoc.yaml
+    -
+      type: import
+      uri: quori_holonomic_drive_controller/drydoc.yaml

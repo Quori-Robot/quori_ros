@@ -1,0 +1,16 @@
+2020-12-02 17:45:31,304 ERROR [orbbec.ni.device_streamset] failed to open device: 	Could not open "2bc5/0404@1/2": Failed to set USB interface!
+
+2020-12-02 17:45:31,395 ERROR [astra] Body Tracking Error: 0x50000583 Orbbec Body Tracking trial expired. Please contact Orbbec support.
+2020-12-02 17:45:31,395 ERROR [astra] Body Tracking Error: 0x50000589 Invalid Orbbec Body Tracking license. Please contact Orbbec support.
+2020-12-14 14:37:52,186 ERROR [astra] Body Tracking Error: 0x50000553 Orbbec Body Tracking trial expired. Please contact Orbbec support.
+2020-12-14 14:37:52,186 ERROR [astra] Body Tracking Error: 0x50000559 Invalid Orbbec Body Tracking license. Please contact Orbbec support.
+2020-12-14 14:37:52,208 ERROR [astra] Body Tracking Error: 0x600006c3 Orbbec Body Tracking trial expired. Please contact Orbbec support.
+2020-12-14 14:38:35,422 ERROR [astra] Body Tracking Error: 0x50000533 Orbbec Body Tracking trial expired. Please contact Orbbec support.
+2020-12-14 14:38:35,422 ERROR [astra] Body Tracking Error: 0x50000539 Invalid Orbbec Body Tracking license. Please contact Orbbec support.
+2020-12-14 14:38:35,442 ERROR [astra] Body Tracking Error: 0x60000673 Orbbec Body Tracking trial expired. Please contact Orbbec support.
+2020-12-14 14:39:00,534 ERROR [astra] Body Tracking Error: 0x50000543 Orbbec Body Tracking trial expired. Please contact Orbbec support.
+2020-12-14 14:39:00,534 ERROR [astra] Body Tracking Error: 0x50000549 Invalid Orbbec Body Tracking license. Please contact Orbbec support.
+2020-12-14 14:39:00,556 ERROR [astra] Body Tracking Error: 0x600006a3 Orbbec Body Tracking trial expired. Please contact Orbbec support.
+2020-12-14 14:39:59,581 ERROR [astra] Body Tracking Error: 0x50000543 Orbbec Body Tracking trial expired. Please contact Orbbec support.
+2020-12-14 14:39:59,581 ERROR [astra] Body Tracking Error: 0x50000549 Invalid Orbbec Body Tracking license. Please contact Orbbec support.
+2020-12-14 14:39:59,603 ERROR [astra] Body Tracking Error: 0x60000693 Orbbec Body Tracking trial expired. Please contact Orbbec support.

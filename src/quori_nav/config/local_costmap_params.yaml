@@ -6,7 +6,7 @@ local_costmap:
 
   #Set the global and robot frames for the costmap
   global_frame: odom
-  robot_base_frame: lower_torso
+  robot_base_frame: quori/base_link
 
   #Set the update and publish frequency of the costmap
   update_frequency: 3.0

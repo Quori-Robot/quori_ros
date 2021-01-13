@@ -20,7 +20,6 @@ Odom Odom::update(const ros::Time &stamp, const double left_vel, const double ri
 
   if (v_right == v_left)
   {
-    
     ret.x_ = x_ + v_avg * cos(heading_) * delta;
     ret.y_ = y_ + v_avg * sin(heading_) * delta;
     ret.heading_ = heading_;

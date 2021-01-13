@@ -1,0 +1,18 @@
+---
+decl:
+  type: unit
+  id: tutorials
+  name: Tutorials
+  rule:
+    name: copy
+    params:
+      path: readme.md
+  children:
+    -
+      type: unit
+      id: getting_started
+      name: "Getting Started"
+      rule:
+        name: copy
+        params:
+          path: readme.md

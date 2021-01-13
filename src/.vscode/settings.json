@@ -53,6 +53,17 @@
     "typeindex": "cpp",
     "typeinfo": "cpp",
     "valarray": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "ctime": "cpp",
+    "strstream": "cpp",
+    "chrono": "cpp",
+    "condition_variable": "cpp",
+    "ratio": "cpp",
+    "iomanip": "cpp",
+    "mutex": "cpp",
+    "thread": "cpp",
+    "cfenv": "cpp",
+    "csignal": "cpp",
+    "codecvt": "cpp"
   }
 }

@@ -1,0 +1,18 @@
+---
+type: unit
+id: quori_controller
+name: quori_controller
+rule:
+  name: copy
+  params:
+    path: readme.md
+children:
+  -
+    type: unit
+    id: quori_controller_api
+    name: quori_controller_api
+    rule:
+      name: clang
+      params:
+        path: include
+        name: "Quori Controller API"

@@ -78,7 +78,7 @@ struct JointStates {
   JointStates()
   {
     // map.insert({ Joint::WaistHinge, JointState::from_position(0) });
-    map.insert({ Joint::TurretJoint, JointState::from_position(0) });
+    // map.insert({ Joint::TurretJoint, JointState::from_position(0) });
     // map.insert({ Joint::BaseX, JointState::from_position(0) });
     // map.insert({ Joint::BaseY, JointState::from_position(0) });
     // map.insert({ Joint::LeftArm1, JointState::from_position(0) });

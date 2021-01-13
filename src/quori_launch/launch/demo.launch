@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <launch>
   <node name="joystick" pkg="joy" type="joy_node" required="true" />
-  <node name="teleop" pkg="quori_teleop" type="node" required="true" />
+  <!-- <node name="teleop" pkg="quori_teleop" type="node" required="true" /> -->
   <include file="$(find quori_launch)/launch/mapping.launch"/>
   <include file="$(find quori_controller)/launch/quori_control_holo.launch"/>
-  <!-- <include file="$(find quori_nav)/launch/move_base.launch"/> -->
+  <include file="$(find quori_nav)/launch/move_base.launch"/>
+  <include file="$(find astra_ros)/launch/default.launch"/>
+  <!-- <node name="astra_body_tracker_node" pkg="astra_body_tracker" type="astra_body_tracker_node" required="true" /> -->
+
 </launch>

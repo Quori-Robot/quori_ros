@@ -4,17 +4,18 @@
 #include <pluginlib/class_list_macros.hpp>
 #include <tf/transform_datatypes.h>
 
+#include <eigen3/Eigen/Geometry>
+
 using namespace quori_holonomic_drive_controller;
 
 QuoriHolonomicDriveController::QuoriHolonomicDriveController()
   : name_("quori_holonomic_drive_controller")
   , odom_frame_id_("odom")
-  , base_frame_id_("base_link")
+  , base_frame_id_("ramsis/wheel_axle")
   , enable_odom_tf_(true)
   , odom_(Odom::zero(ros::Time::now(), 0.0, 0.0))
   , cmd_vel_timeout_(0.5)
 {
-
 }
 
 bool QuoriHolonomicDriveController::init(hardware_interface::VelocityJointInterface *hw, ros::NodeHandle &root_nh, ros::NodeHandle &controller_nh)
@@ -42,11 +43,10 @@ bool QuoriHolonomicDriveController::init(hardware_interface::VelocityJointInterf
   right_joint_ = hw->getHandle("base_right");
   turret_joint_ = hw->getHandle("base_turret");
 
-  marker_pub_ = controller_nh.advertise<visualization_msgs::MarkerArray>("/quori/markers", 100);
-
-
   sub_command_ = controller_nh.subscribe("cmd_vel", 1, &QuoriHolonomicDriveController::cmdVelCallback, this);
 }
+
+typedef Eigen::Transform<double, 3, Eigen::Affine> Transform3d;
 
 void QuoriHolonomicDriveController::update(const ros::Time &time, const ros::Duration &period)
 {
@@ -54,7 +54,6 @@ void QuoriHolonomicDriveController::update(const ros::Time &time, const ros::Dur
   // odometry_.updateOpenLoop(last0_cmd_.lin, last0_cmd_.ang, time);
 
   odom_ = odom_.update(time, left_joint_.getVelocity(), right_joint_.getVelocity(), turret_joint_.getPosition());
-  // std::cout << odom_ << std::endl;
 
   if (!angle_offset_)
   {
@@ -74,6 +73,9 @@ void QuoriHolonomicDriveController::update(const ros::Time &time, const ros::Dur
     const double x = mapped_x * cos(heading) - mapped_y * sin(heading);
     const double y = mapped_x * sin(heading) + mapped_y * cos(heading);
     
+    const Transform3d odom_frame = Eigen::Translation3d(-odom_.getX(), -odom_.getY(), 0.0)
+      * Eigen::AngleAxisd(-odom_.getHeading(), Eigen::Vector3d::UnitZ());
+    const Transform3d center_frame = odom_frame * Transform3d(Eigen::Translation3d(0.12, 0, 0));
 
     // Populate odom message and publish
     if (odom_pub_->trylock())
@@ -135,49 +137,13 @@ void QuoriHolonomicDriveController::update(const ros::Time &time, const ros::Dur
 
   // The X and Y axes represented by the x_joint_ and y_joint_ do not rotate
   // with the base_link. We map the linear X vel and linear Y vel to these axes.
-  
-  
-
-  
-  const double linear_x = curr_cmd.lin_x;
-  const double linear_y = curr_cmd.lin_y;
-  const double mapped_linear_x = linear_x * cos(-heading) - linear_y * sin(-heading);
-  const double mapped_linear_y = linear_x * sin(-heading) + linear_y * cos(-heading);
-
-  visualization_msgs::MarkerArray markers;
-  visualization_msgs::Marker vec;
-  vec.header.stamp = ros::Time::now();
-  vec.header.frame_id = "map";
-  vec.ns = "quori";
-  vec.id = 0;
-  vec.type = visualization_msgs::Marker::ARROW;
-  vec.action = visualization_msgs::Marker::ADD;
-  vec.pose.orientation = tf::createQuaternionMsgFromYaw(atan2(mapped_linear_y, mapped_linear_x));
-  vec.color.r = 1.0;
-  vec.scale.x = vec.scale.y = vec.scale.z = 1;
-
-  markers.markers.push_back(vec);
-
-  marker_pub_.publish(markers);
-
-  // std::cout
-  //   << "heading: " << (heading / M_PI * 180) << ":" << std::endl
-  //   << "  odom heading: " << (-odom_.getHeading() / M_PI * 180) << std::endl
-  //   << "  turret angle: " << (turret_joint_.getPosition() / M_PI * 180) << std::endl
-  //   << "  x: " << linear_x << " -> " << mapped_linear_x << std::endl
-  //   << "  y: " << linear_y << " -> " << mapped_linear_y << std::endl;
-
   HolonomicCommand command = {
-    .lin_x_vel = linear_x,
-    .lin_y_vel = linear_y,
+    .lin_x_vel = curr_cmd.lin_x,
+    .lin_y_vel = curr_cmd.lin_y,
     .ang_z_vel = curr_cmd.ang,
   };
 
-  std::cout << command << std::endl;
-
-  const DiffDriveCommand diff_drive_cmd = compute_ramsis_jacobian(command, -(turret_joint_.getPosition() - M_PI / 4), holonomic_params_);
-  std::cout << diff_drive_cmd << std::endl;
-
+  const DiffDriveCommand diff_drive_cmd = compute_ramsis_jacobian(command, -turret_joint_.getPosition(), holonomic_params_);
 
   left_joint_.setCommand(diff_drive_cmd.motor_left_vel);
   right_joint_.setCommand(diff_drive_cmd.motor_right_vel);
@@ -256,7 +222,7 @@ void QuoriHolonomicDriveController::setOdomPubFields(ros::NodeHandle &root_nh, r
     
   tf_odom_pub_.reset(new realtime_tools::RealtimePublisher<tf::tfMessage>(root_nh, "/tf", 100));
   tf_odom_pub_->msg_.transforms.resize(1);
-  tf_odom_pub_->msg_.transforms[0].transform.translation.z = 0.0;
+  tf_odom_pub_->msg_.transforms[0].transform.translation.z = 0.075;
   tf_odom_pub_->msg_.transforms[0].child_frame_id = base_frame_id_;
   tf_odom_pub_->msg_.transforms[0].header.frame_id = odom_frame_id_;
 }
@@ -310,7 +276,6 @@ void QuoriHolonomicDriveController::publishWheelData(
   double right_wheel_radius
 )
 {
-
 }
 
 PLUGINLIB_EXPORT_CLASS(quori_holonomic_drive_controller::QuoriHolonomicDriveController, controller_interface::ControllerBase);

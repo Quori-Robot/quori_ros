@@ -1,6 +1,5 @@
 <launch>
-  <param name="robot_description" textfile="$(find quori_description)/urdf/quori.urdf" />
-  <param name="robot_descripion" textfile="$(find quori_description)/urdf/quori.urdf" />
+  <param name="robot_description" command="$(find xacro)/xacro.py $(find quori_description)/urdf/quori.xacro" />
 
   <!-- Load joint controller configurations from YAML file to parameter server -->
   <rosparam file="$(find quori_controller)/config/quori_control_holo.yaml" command="load"/>

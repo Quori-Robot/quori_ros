@@ -2,6 +2,7 @@
 <launch>
   <node name="slam_gmapping"	pkg="gmapping"  type="slam_gmapping" output="screen">
     <remap from="scan" to="scan_filtered"/>
+    <param name="base_frame" type="string" value="quori/base_link" />
     <param name="maxUrange" type="double" value="5.5" />
     <param name="maxRange" type="double" value="5.5" />
     <param name="minimumScore" type="double" value="50" />
