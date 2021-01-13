@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Install LLVM
         run: |
-          bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+          sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
       - uses: actions/checkout@v2
         with:
           path: quori_ros
