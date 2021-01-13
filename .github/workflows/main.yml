@@ -30,10 +30,8 @@ jobs:
           LLVM_CONFIG_PATH: /usr/bin/llvm-config-11
           LIBCLANG_PATH: /usr/lib/llvm-11/lib
         working-directory: drydoc
-      - run: drydoc gen
+      - run: $GITHUB_WORKSPACE/drydoc/target/debug/drydoc gen
         working-directory: quori_ros
-        env:
-          PATH: $GITHUB_WORKSPACE/drydoc/target/debug
       - uses: peaceiris/actions-gh-pages@v3.7.3
         with:
           deploy_key: DEPLOY_KEY
