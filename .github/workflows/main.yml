@@ -29,6 +29,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: quori_ros
+          submodules: recursive
       - name: Checkout Drydoc
         uses: actions/checkout@v2
         with:
