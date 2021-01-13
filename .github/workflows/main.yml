@@ -11,7 +11,8 @@ jobs:
   build:
     runs-on: ubuntu-16.04
     steps:
-      - run: curl https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.1/clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04.tar.xz --output clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04.tar.xz
+      - run: sudo apt-get install wget
+      - run: wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.1/clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04.tar.xz
         working-directory: $GITHUB_WORKSPACE
       - run: ls -a
       - run: tar -xvf clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04.tar.xz
