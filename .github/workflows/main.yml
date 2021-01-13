@@ -11,7 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-16.04
     steps:
-      - run: apt-get install wget
+      - run: sudo apt-get install wget
       - run: wget https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.1/clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04.tar.xz
       - run: tar -xvf clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04.tar.xz -C llvm
       - run: ls -a llvm
