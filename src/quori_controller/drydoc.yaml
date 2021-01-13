@@ -7,3 +7,4 @@ decl:
     name: copy
     params:
       path: readme.md
+      name: quori_controller

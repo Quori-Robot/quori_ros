@@ -12,4 +12,4 @@
 	url = https://github.com/ros-perception/laser_filters.git
 [submodule "src/astra_ros"]
 	path = src/astra_ros
-	url = git@github.com:semio-ai/astra_ros.git
+	url = https://github.com/semio-ai/astra_ros.git
