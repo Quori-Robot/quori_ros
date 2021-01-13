@@ -21,5 +21,13 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - name: Run a one-line script
-        run: ls -a
+      - run: cargo build
+        working-directory: drydoc
+      - run: drydoc gen
+        working-directory: quori_ros
+        env:
+          PATH: $GITHUB_WORKSPACE/drydoc/target/debug
+      - uses: peaceiris/actions-gh-pages@v3.7.3
+        with:
+          deploy_key: DEPLOY_KEY
+          publish_dir: html
