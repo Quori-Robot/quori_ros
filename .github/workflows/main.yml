@@ -29,7 +29,7 @@ jobs:
       - run: cargo build
         working-directory: drydoc
         env:
-          LLVM_PATH: $GITHUB_WORKSPACE/clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04/
+          LLVM_CONFIG_PATH: $GITHUB_WORKSPACE/clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04/bin/llvm-config
       - run: drydoc gen
         working-directory: quori_ros
         env:
