@@ -30,6 +30,8 @@ jobs:
         working-directory: drydoc
         env:
           LLVM_CONFIG_PATH: $GITHUB_WORKSPACE/clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04/bin/llvm-config
+          LIBCLANG_PATH: $GITHUB_WORKSPACE/clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04/lib
+          CLANG_PATH: $GITHUB_WORKSPACE/clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04/bin/clang
       - run: drydoc gen
         working-directory: quori_ros
         env:
