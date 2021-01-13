@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+
+<robot name="ramsis" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find quori_description)/urdf/ramsis_kinematics.xacro" />
+  <ramsis_kinematics />
+</robot>

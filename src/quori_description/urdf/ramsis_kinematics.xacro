@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+
+<xacro:macro name="ramsis_kinematics" xmlns:xacro="http://ros.org/wiki/xacro">
+  <material name="ramsis/base_link_material">
+    <color rgba="0 0 0 1"/>
+  </material>
+
+  <material name="ramsis/laser_scanner_material">
+    <color rgba="0.3 0.3 0.3 1"/>
+  </material>
+
+  <link name="ramsis/base_link">
+    <inertial>
+      <origin xyz="0 0 0.1013587" rpy="0 0 0"/>
+      <mass value="9.8"/>
+      <inertia ixx="0.176"  ixy="0"  ixz="0" iyy="0.176" iyz="0" izz="0.285" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0.1013587" rpy="0 0 0" />
+      <geometry>
+        <cylinder length="0.2027174" radius="0.2413"/>
+      </geometry>
+      <material name="ramsis/base_link_material"/>
+    </visual>
+  </link>
+
+
+  <link name="ramsis/base_laser_scanner">
+    <inertial>
+      <mass value="0.17"/>
+      <inertia ixx="0.0001"  ixy="0"  ixz="0" iyy="0.0001" iyz="0" izz="0.0001" />
+    </inertial>
+    <visual>
+        <geometry>
+          <cylinder length="0.025" radius="0.05"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 -0"/>
+      <material name="ramsis/laser_scanner_material"/>
+    </visual>
+  </link>
+
+  <joint name="laser_scanner_joint" type="fixed">
+    <origin xyz="0.178 0 0.1" rpy="0 0 0" />
+    <parent link="ramsis/base_link" />
+    <child link="ramsis/base_laser_scanner" />
+  </joint>
+
+  <link name="ramsis/turret_link">
+  </link>
+
+  <link name="ramsis/left_wheel_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0"  ixy="0"  ixz="0" iyy="0.0" iyz="0" izz="0.0" />
+    </inertial>
+  </link>
+
+  <link name="ramsis/right_wheel_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0"  ixy="0"  ixz="0" iyy="0.0" iyz="0" izz="0.0" />
+    </inertial>
+  </link>
+
+  <joint name="ramsis/wheel_axle_joint" type="fixed">
+    <origin xyz="0.1 0 -0.075" />
+    <parent link="ramsis/wheel_axle" />
+    <child link="ramsis/base_link" />
+  </joint>
+
+  <link name="ramsis/wheel_axle">
+  </link>
+
+  <joint name="base_left" type="continuous">
+    <origin xyz="0 0.12284075 0" rpy="0 0 0"/>
+    <parent link="ramsis/wheel_axle"/>
+    <child link="ramsis/left_wheel_link"/>
+    <axis xyz="0 0 1" />
+    <limit effort="1" velocity="0.5"/>
+  </joint>
+
+  <joint name="base_right" type="continuous">
+    <origin xyz="0 -0.12284075 0" rpy="0 0 0"/>
+    <parent link="ramsis/wheel_axle"/>
+    <child link="ramsis/right_wheel_link"/>
+    <axis xyz="0 0 1" />
+    <limit effort="1" velocity="0.5"/>
+  </joint>
+
+  <joint name="base_turret" type="continuous">
+    <origin xyz="0 0 0.2027174" rpy="0 0 0"/>
+    <parent link="ramsis/base_link"/>
+    <child link="ramsis/turret_link"/>
+    <axis xyz="0 0 1" />
+    <limit effort="1" velocity="3"/>
+  </joint>
+</xacro:macro>
