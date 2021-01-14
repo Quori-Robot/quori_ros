@@ -2,7 +2,11 @@
 
 This catkin workspace contains all of the ROS packages necessary for full operation of the Quori robot platform from UPenn.
 
-## External Dependencies
+## Prerequisites
+
+The package is compatible with **Ubuntu 16.04** and **ROS Kinetic**, built with the **Catkin** system. Make sure you have the right environment configured.
+
+### External Dependencies
 
 Some ROS packages are required for use of this workspace:
 ```
@@ -17,6 +21,4 @@ cd quori_ros
 git submodule init
 catkin_make
 . ./devel/setup.sh
-roscd astra_camera
-./scripts/create_udev_rules
 ```

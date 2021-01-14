@@ -21,3 +21,12 @@ decl:
     -
       type: import
       uri: astra_ros/drydoc.yaml
+    -
+      type: import
+      uri: quori_nav/drydoc.yaml
+    -
+      type: import
+      uri: quori_teleop/drydoc.yaml
+    -
+      type: import
+      uri: quori_joint_states_publisher/drydoc.yaml
