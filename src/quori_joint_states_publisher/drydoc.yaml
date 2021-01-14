@@ -1,0 +1,10 @@
+---
+decl:
+  type: unit
+  id: quori_joint_states_publisher
+  name: quori_joint_states_publisher
+  rule:
+    name: copy
+    params:
+      path: readme.md
+      name: "quori_joint_states_publisher"
