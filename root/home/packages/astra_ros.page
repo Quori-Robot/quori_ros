@@ -1,7 +1,5 @@
 #  astra_ros
 
-<inline-page://homeastra_rosn-astra_ros>
-
 astra_ros wraps the Orbbec Astra SDK for ROS. It can be used as a library (with or without ROS), a nodelet, or a node.
 
 ## 1. Installation
