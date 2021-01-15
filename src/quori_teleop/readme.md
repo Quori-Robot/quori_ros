@@ -13,8 +13,8 @@ Hold `A` for "fast" mode, which doubles the movement speed.
 
 ### Right Arm Control (Hold Right Trigger)
 
-- `right_arm_r1` - Left Thumb Stick (Y axis)
-- `right_arm_r2` - Left Thumb Stick (X axis)
+- `right_arm_r1` - Right Thumb Stick (Y axis)
+- `right_arm_r2` - Right Thumb Stick (X axis)
 
 Hold `A` for "fast" mode, which doubles the movement speed.
 
