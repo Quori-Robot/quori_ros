@@ -1,0 +1,1 @@
+{"package":"astra_ros","name":"GetMirrored","request":{"package":"astra_ros","name":"GetMirroredReq","statements":[],"comment":""},"response":{"package":"astra_ros","name":"GetMirroredRes","statements":[{"type":"field","kind":{"type":"primitive","kind":"bool"},"array_kind":{"type":"none"},"name":"mirrored","comment":null}],"comment":""}}

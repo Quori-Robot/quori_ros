@@ -1,0 +1,1 @@
+{"package":"astra_ros","name":"GetDepthRegistration","request":{"package":"astra_ros","name":"GetDepthRegistrationReq","statements":[],"comment":""},"response":{"package":"astra_ros","name":"GetDepthRegistrationRes","statements":[{"type":"field","kind":{"type":"primitive","kind":"bool"},"array_kind":{"type":"none"},"name":"registration","comment":null}],"comment":""}}

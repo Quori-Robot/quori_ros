@@ -1,0 +1,1 @@
+{"package":"astra_ros","name":"Vector2f","statements":[{"type":"field","kind":{"type":"primitive","kind":"float32"},"array_kind":{"type":"none"},"name":"x","comment":"The X component of the vector"},{"type":"field","kind":{"type":"primitive","kind":"float32"},"array_kind":{"type":"none"},"name":"y","comment":"The Y component of the vector"}],"comment":null}

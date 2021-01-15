@@ -1,0 +1,1 @@
+{"package":"astra_ros","name":"GetRunning","request":{"package":"astra_ros","name":"GetRunningReq","statements":[],"comment":""},"response":{"package":"astra_ros","name":"GetRunningRes","statements":[{"type":"field","kind":{"type":"primitive","kind":"bool"},"array_kind":{"type":"none"},"name":"running","comment":null}],"comment":""}}

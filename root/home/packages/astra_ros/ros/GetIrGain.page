@@ -1,0 +1,1 @@
+{"package":"astra_ros","name":"GetIrGain","request":{"package":"astra_ros","name":"GetIrGainReq","statements":[],"comment":""},"response":{"package":"astra_ros","name":"GetIrGainRes","statements":[{"type":"field","kind":{"type":"primitive","kind":"int32"},"array_kind":{"type":"none"},"name":"gain","comment":null}],"comment":""}}

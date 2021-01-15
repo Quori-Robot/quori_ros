@@ -1,0 +1,1 @@
+{"package":"astra_ros","name":"Hand","statements":[{"type":"field","kind":{"type":"reference","package":"astra_ros","name":"HandPoint","page_id":null},"array_kind":{"type":"variable"},"name":"hand_points","comment":null}],"comment":null}

@@ -1,0 +1,1 @@
+{"package":"astra_ros","name":"GetUsbInfo","request":{"package":"astra_ros","name":"GetUsbInfoReq","statements":[],"comment":""},"response":{"package":"astra_ros","name":"GetUsbInfoRes","statements":[{"type":"field","kind":{"type":"reference","package":"astra_ros","name":"UsbInfo","page_id":null},"array_kind":{"type":"none"},"name":"usb_info","comment":null}],"comment":""}}

@@ -1,0 +1,1 @@
+{"package":"astra_ros","name":"GetSerial","request":{"package":"astra_ros","name":"GetSerialReq","statements":[],"comment":""},"response":{"package":"astra_ros","name":"GetSerialRes","statements":[{"type":"field","kind":{"type":"primitive","kind":"string"},"array_kind":{"type":"none"},"name":"serial","comment":null}],"comment":""}}
