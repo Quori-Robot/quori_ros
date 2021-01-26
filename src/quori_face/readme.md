@@ -31,8 +31,8 @@ These parameter names directly correspond to the paper "LOW COST OPTICAL MECHANI
 
 `quori_face` aggressively caches the expensive transform algorithm into a lookup table.
 
-- `~lookup_resolution/x: uint32` (default: `2048`) - Width of the transform lookup table in pixels.
-- `~lookup_resolution/y: uint32` (default: `2048`) - Height of the transform lookup table in pixels.
+- `~lookup_table_resolution/x: uint32` (default: `2048`) - Width of the transform lookup table in pixels.
+- `~lookup_table_resolution/y: uint32` (default: `2048`) - Height of the transform lookup table in pixels.
 
 ### Image Parameters
 
@@ -58,6 +58,12 @@ Quori may optionally be configured with a helmet. We can adjust the spherical re
 
 - `dx: double` - The `~transform/delta/x` value (see above). 
 - `dy: double` - The `~transform/delta/y` value (see above).
+- `center_theta: double` - The `~center/theta` value (see above). 
+- `center_psi: double` - The `~center/psi` value (see above).
+- `min_theta: double` - The `~min/theta` value (see above). 
+- `min_psi: double` - The `~min/psi` value (see above).
+- `max_theta: double` - The `~max/theta` value (see above). 
+- `max_psi: double` - The `~max/psi` value (see above).
 
 ## Subscribed Topics
 

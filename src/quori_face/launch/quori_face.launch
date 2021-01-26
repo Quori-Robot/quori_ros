@@ -1,5 +1,8 @@
 <launch>
-  <node name="quori_face" pkg="quori_face" type="quori_face_node" ns="/quori/face" output="screen" respawn="false" required="true">
+  <node name="face" pkg="quori_face" type="quori_face_node" ns="/quori" output="screen" respawn="false" required="true">
+    <env name="DISPLAY" value=":0" />
+
     <rosparam file="$(find quori_face)/config/params.yaml" command="load"/>
+    <param name="override_image_encoding" type="string" value="rgb8" />
   </node>
 </launch>

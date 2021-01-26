@@ -80,6 +80,9 @@ namespace quori_face
      */
     double psi;
 
+    SphericalCoordinate operator +(const SphericalCoordinate &rhs) const;
+    SphericalCoordinate &operator +=(const SphericalCoordinate &rhs);
+
     static const SphericalCoordinate CENTER;
   };
 

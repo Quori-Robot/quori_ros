@@ -150,6 +150,21 @@ SphericalCoordinate::SphericalCoordinate(const double theta, const double psi)
 {
 }
 
+SphericalCoordinate SphericalCoordinate::operator +(const SphericalCoordinate &rhs) const
+{
+  return {
+    .theta = theta + rhs.theta,
+    .psi = psi + rhs.psi
+  };
+}
+
+SphericalCoordinate &SphericalCoordinate::operator +=(const SphericalCoordinate &rhs)
+{
+  theta += rhs.theta;
+  psi += rhs.psi;
+  return *this;
+}
+
 const SphericalCoordinate SphericalCoordinate::CENTER(0.45 * M_PI, 1.55);
 
 Vector2<double> quori_face::transform(const TransformStaticParameters &static_params, const SphericalCoordinate &coord)
@@ -190,9 +205,12 @@ float *quori_face::generateLookupTable(const TransformStaticParameters &static_p
     {
       for (std::size_t x = 0; x < size.x; ++x)
       {
+        const double frac_x = static_cast<double>(x) / size.x;
+        const double frac_y = static_cast<double>(y) / size.y;
+
         const auto t = transform(static_params, SphericalCoordinate(
-          min.theta + static_cast<double>(x) / size.x * theta_range,
-          min.psi + static_cast<double>(y) / size.y * psi_range
+          min.theta + frac_y * theta_range,
+          min.psi + frac_x * psi_range
         ));
 
         const auto tx = clamp<std::size_t>(0, t.x, static_params.screen_size.x - 1);
@@ -200,8 +218,8 @@ float *quori_face::generateLookupTable(const TransformStaticParameters &static_p
 
         const std::size_t index = (ty * static_params.screen_size.x + tx) * 3;
         
-        lookup_table[index + 0] = (float)x / size.x;
-        lookup_table[index + 1] = (float)y / size.y;
+        lookup_table[index + 0] = frac_x;
+        lookup_table[index + 1] = 1.0 - frac_y;
 
         // Was the value clamped? Used for masking
         lookup_table[index + 2] = (tx != t.x || ty != t.y) ? 1.0 : 0;

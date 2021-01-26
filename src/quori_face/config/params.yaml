@@ -1,4 +1,28 @@
+center:
+  psi: 1.575747859968651
+  theta: 1.471455315819969
+max:
+  theta: -1.413716694115407
+  psi: -1.570796326794896
 transform:
+  R: 4
+  screen_size:
+    y: 1080
+    x: 1920
+  L: 8.447625281745774
+  h: 1
+  r_o: 2
   delta:
-    x: 
-    y: 
+    x: -2.55
+    y: -1.7
+  r_m: 1.5
+  epsilon: 0.05906855906704951
+lookup_table_resolution:
+  y: 2048
+  x: 2048
+image_resolution:
+  y: 720
+  x: 1280
+min:
+  psi: 1.570796326794896
+  theta: 1.413716694115407

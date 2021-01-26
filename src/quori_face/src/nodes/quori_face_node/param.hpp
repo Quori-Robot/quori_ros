@@ -12,6 +12,8 @@ namespace quori_face_node
 {
   std::uint32_t param(ros::NodeHandle &nh, const std::string &name, const std::uint32_t value);
   double param(ros::NodeHandle &nh, const std::string &name, const double value);
+  bool param(ros::NodeHandle &nh, const std::string &name, const bool value);
+  std::string param(ros::NodeHandle &nh, const std::string &name, const std::string &value);
 
   template<typename T>
   quori_face::Vector2<T> param(ros::NodeHandle &nh, const std::string &name, const quori_face::Vector2<T> &value)

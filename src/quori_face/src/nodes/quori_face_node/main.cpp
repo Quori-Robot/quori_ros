@@ -30,11 +30,15 @@
 
 #include <unordered_map>
 #include <ros/ros.h>
+#include <ros/package.h>
 
 #include <boost/optional.hpp>
+#include <fstream>
 
 #include <dynamic_reconfigure/server.h>
 #include <quori_face/CalibrationConfig.h>
+
+#include <yaml-cpp/yaml.h>
 
 #include "trace.hpp"
 #include "param.hpp"
@@ -62,7 +66,7 @@ namespace
   };
 
   SphericalCoordinate max_coord = {
-    .theta = M_PI * 0.15,
+    .theta = M_PI * 0.45,
     .psi = M_PI * 0.5
   };
 
@@ -74,8 +78,7 @@ namespace
       debounce = false;
       return;
     }
-    std::cout << "dynamic reconfigure!" << std::endl;
-    
+
     static_params.delta.x = calibration.dx;
     static_params.delta.y = calibration.dy;
     
@@ -102,8 +105,6 @@ namespace
     .x = 1280,
     .y = 720
   };
-
-  
 
   const std::unordered_map<std::string, std::uint32_t> ENCODING_GL_MAPPINGS {
     { sensor_msgs::image_encodings::RGB8, GL_RGB },
@@ -149,37 +150,43 @@ int main(int argc, char *argv[])
   ros::NodeHandle nh;
   ros::NodeHandle pnh("~");
 
+  
+
   boost::recursive_mutex reconfigure_mutex;
   dynamic_reconfigure::Server<quori_face::CalibrationConfig> reconfigure_server(reconfigure_mutex);
   reconfigure_server.setCallback(boost::bind(&reconfigureCallback, _1, _2));
 
-  const auto lookup_table_resolution = param(pnh, "lookup_resolution", LOOKUP_TABLE_RESOLUTION);
+  const auto lookup_table_resolution = param(pnh, "lookup_table_resolution", LOOKUP_TABLE_RESOLUTION);
   const auto image_resolution = param(pnh, "image_resolution", IMAGE_RESOLUTION);
   center = param(pnh, "center", center);
-  min_coord = param(pnh, "min", min_coord);
-  min_coord.theta += center.theta;
-  min_coord.psi += center.psi;
-  max_coord = param(pnh, "max", max_coord);
-  max_coord.theta += center.theta;
-  max_coord.psi += center.psi;
+
+  min_coord = center + param(pnh, "min", min_coord);
+  max_coord = center + param(pnh, "max", max_coord);
+
+  const bool update_params = param(pnh, "update_params", false);
+
+  const std::string override_image_encoding = param(pnh, "override_image_encoding", std::string());
 
   static_params = param(pnh, "transform", static_params);
+
+
 
   CalibrationConfig config;
   config.dx = static_params.delta.x;
   config.dy = static_params.delta.y;
   config.center_theta = center.theta;
   config.center_psi = center.psi;
-  config.min_theta = min_coord.theta;
-  config.min_psi = min_coord.psi;
-  config.max_theta = max_coord.theta;
-  config.max_psi = max_coord.psi;
+  config.min_theta = center.theta - min_coord.theta;
+  config.min_psi = center.psi - min_coord.psi;
+  config.max_theta = center.theta - max_coord.theta;
+  config.max_psi = center.psi - max_coord.psi;
   reconfigure_server.updateConfig(config);
 
   const auto generate_lookup_table = [&]() {
     const auto start_time = std::chrono::system_clock::now();
     cout << "Updating lookup table (this may take several seconds)...";
     cout.flush();
+    
     GLfloat *const ret = generateLookupTable(static_params, min_coord, max_coord, lookup_table_resolution);
     const auto end_time = std::chrono::system_clock::now();
     cout << " done (took " << std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count() << "ms)" << endl;
@@ -188,9 +195,9 @@ int main(int argc, char *argv[])
   GLfloat *lookup_table = generate_lookup_table();
 
 
-  image_transport::ImageTransport it(nh);
-  const auto image_sub = it.subscribe("/movie/movie", 1, &imageCallback);
-  const auto window = Window::open(800, 600, "Quori Face", Monitor::getPrimaryMonitor());
+  image_transport::ImageTransport it(pnh);
+  const auto image_sub = it.subscribe("image", 1, &imageCallback);
+  const auto window = Window::open(static_params.screen_size.x, static_params.screen_size.y, "Quori Face", Monitor::getPrimaryMonitor());
   QUORI_FACE_NODE_TRACE(glEnable(GL_TEXTURE_2D));
 
   window->bind();
@@ -200,7 +207,6 @@ int main(int argc, char *argv[])
     Shader::compile(Shader::Type::Vertex, shader::VERTEX),
     Shader::compile(Shader::Type::Fragment, shader::FRAGMENT)
   });
-
 
   // Generate geometry for displaying the transformed image
 
@@ -232,7 +238,7 @@ int main(int argc, char *argv[])
   size_t image_size = image_resolution.x * image_resolution.y * 3;
   uint8_t *const image_texture_data = new uint8_t[image_size];
   memset(image_texture_data, 0, image_size);
-  Texture::Ptr image_texture = Texture::create(image_resolution.y, image_resolution.x, GL_RGB, image_texture_data);
+  Texture::Ptr image_texture = Texture::create(image_resolution.y, image_resolution.x, GL_BGR, image_texture_data);
   delete[] image_texture_data;
   const auto lookup_table_texture = Texture::create(static_params.screen_size.y, static_params.screen_size.x, lookup_table);
 
@@ -259,8 +265,8 @@ int main(int argc, char *argv[])
   {
     image_texture->bind();
     image_pbo.bind(image_pbo_index);
-    QUORI_FACE_NODE_TRACE(glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, image_resolution.x, image_resolution.y, GL_RGB, GL_UNSIGNED_BYTE, 0));
-
+    QUORI_FACE_NODE_TRACE(glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, image_resolution.x, image_resolution.y, GL_BGR, GL_UNSIGNED_BYTE, 0));
+    checkGlError();
     image_pbo.unbind();
   };
 
@@ -268,10 +274,12 @@ int main(int argc, char *argv[])
   {
     image_pbo.bind(image_pbo_index + 1);
     uint8_t *const data = reinterpret_cast<uint8_t *>(QUORI_FACE_NODE_TRACE(glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_READ_WRITE)));
+    checkGlError();
     if (data)
     {
       mapImage(data, image);
       QUORI_FACE_NODE_TRACE(glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER));
+      checkGlError();
     }
 
     image_pbo.unbind();
@@ -286,10 +294,12 @@ int main(int argc, char *argv[])
     if (!latest_image) continue;
     if (latest_image == prev_image) continue;
 
-    const auto cv_it = ENCODING_CV_MAPPINGS.find(latest_image->encoding);
+    const auto &encoding = override_image_encoding.empty() ? latest_image->encoding : override_image_encoding;
+
+    const auto cv_it = ENCODING_CV_MAPPINGS.find(encoding);
     if (cv_it == ENCODING_CV_MAPPINGS.cend())
     {
-      cerr << "Unsupported image encoding (no CV encoding) \"" << latest_image->encoding << "\"" << endl;
+      cerr << "Unsupported image encoding (no CV encoding) \"" << encoding << "\"" << endl;
       continue;
     }
 
@@ -302,10 +312,10 @@ int main(int argc, char *argv[])
       latest_image->step
     );
     
-    const auto cvt_it = ENCODING_CV_CVT_MAPPINGS.find(latest_image->encoding);
+    const auto cvt_it = ENCODING_CV_CVT_MAPPINGS.find(encoding);
     if (cvt_it == ENCODING_CV_CVT_MAPPINGS.cend())
     {
-      cerr << "Unsupported image encoding (no conversion) \"" << latest_image->encoding << "\"" << endl;
+      cerr << "Unsupported image encoding (no conversion) \"" << encoding << "\"" << endl;
       continue;
     }
 
@@ -321,7 +331,9 @@ int main(int argc, char *argv[])
 
     if (final_image.rows != image_resolution.y || final_image.cols != image_resolution.x)
     {
-      cv::resize(final_image, final_image, cv::Size(image_resolution.x, image_resolution.y));
+      cv::Mat resized;
+      cv::resize(final_image, resized, cv::Size(image_resolution.x, image_resolution.y));
+      final_image = resized;
     }
 
     prev_image = latest_image;
@@ -329,17 +341,19 @@ int main(int argc, char *argv[])
     if (static_params_updated)
     {
       static_params_updated = false;
-      QUORI_FACE_NODE_TRACE(glActiveTexture(GL_TEXTURE0));
-
       GLfloat *const next_lookup_table = generate_lookup_table();
+
+      QUORI_FACE_NODE_TRACE(glActiveTexture(GL_TEXTURE0));
+      checkGlError();
+
       lookup_table_texture->bind();
-      QUORI_FACE_NODE_TRACE(glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, lookup_table_resolution.x, lookup_table_resolution.y, GL_RGB, GL_FLOAT, next_lookup_table));
+      QUORI_FACE_NODE_TRACE(glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, static_params.screen_size.x, static_params.screen_size.y, GL_RGB, GL_FLOAT, next_lookup_table));
       delete[] lookup_table;
       lookup_table = next_lookup_table;
       checkGlError();
-      QUORI_FACE_NODE_TRACE(glGenerateMipmap(GL_TEXTURE_2D));
-      glBindTexture(GL_TEXTURE_2D, 0);
 
+      glBindTexture(GL_TEXTURE_2D, 0);
+      checkGlError();
     }
 
 
@@ -375,6 +389,79 @@ int main(int argc, char *argv[])
   QUORI_FACE_NODE_TRACE(glDeleteBuffers(1, &ebo));
 
   delete[] lookup_table;
+
+  // Update params
+
+  if (update_params)
+  {
+    const std::string path = ros::package::getPath("quori_face");
+    if (path.empty())
+    {
+      ROS_ERROR("Failed to update parameter file. quori_face package not found.");
+      return EXIT_FAILURE;
+    }
+
+    std::ofstream out(path + "/config/params.yaml");
+
+    if (!out.is_open())
+    {
+      ROS_ERROR("Failed to update parameter file. Couldn't open parameter file for writing.");
+      return EXIT_FAILURE;
+    }
+
+    YAML::Node delta;
+    delta["x"] = static_params.delta.x;
+    delta["y"] = static_params.delta.y;
+
+    YAML::Node screen_size;
+    screen_size["x"] = static_params.screen_size.x;
+    screen_size["y"] = static_params.screen_size.y;
+    
+    YAML::Node transform;
+    transform["R"] = static_params.R;
+    transform["r_m"] = static_params.r_m;
+    transform["r_o"] = static_params.r_o;
+    transform["h"] = static_params.h;
+    transform["L"] = static_params.L;
+    transform["epsilon"] = static_params.epsilon;
+    transform["delta"] = delta;
+    transform["screen_size"] = screen_size;
+
+    YAML::Node lookup_table_resolution_node;
+    lookup_table_resolution_node["x"] = lookup_table_resolution.x;
+    lookup_table_resolution_node["y"] = lookup_table_resolution.y;
+
+    YAML::Node image_resolution_node;
+    image_resolution_node["x"] = image_resolution.x;
+    image_resolution_node["y"] = image_resolution.y;
+
+    YAML::Node min_node;
+    min_node["theta"] = (min_coord.theta - center.theta);
+    min_node["psi"] = (min_coord.psi - center.psi);
+
+    YAML::Node max_node;
+    max_node["theta"] = (max_coord.theta - center.theta);
+    max_node["psi"] = (max_coord.psi - center.psi);
+
+    YAML::Node center_node;
+    center_node["theta"] = center.theta;
+    center_node["psi"] = center.psi;
+
+    YAML::Node root;
+    root["transform"] = transform;
+    root["lookup_table_resolution"] = lookup_table_resolution_node;
+    root["image_resolution"] = image_resolution_node;
+    root["max"] = max_node;
+    root["min"] = min_node;
+    root["center"] = center_node;
+
+
+    YAML::Emitter emitter;
+    emitter << root;
+
+    out << emitter.c_str();
+    out.close();
+  }
 
   return EXIT_SUCCESS;
 }

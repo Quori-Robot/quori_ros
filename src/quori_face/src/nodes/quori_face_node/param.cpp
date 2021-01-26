@@ -15,6 +15,18 @@ double quori_face_node::param(ros::NodeHandle &nh, const std::string &name, cons
   return nh.getParam(name, res) ? res : value;
 }
 
+bool quori_face_node::param(ros::NodeHandle &nh, const std::string &name, const bool value)
+{
+  bool res = false;
+  return nh.getParam(name, res) ? res : value;
+}
+
+std::string quori_face_node::param(ros::NodeHandle &nh, const std::string &name, const std::string &value)
+{
+  std::string res;
+  return nh.getParam(name, res) ? res : value;
+}
+
 SphericalCoordinate quori_face_node::param(ros::NodeHandle &nh, const std::string &name, const SphericalCoordinate &value)
 {
   return SphericalCoordinate(
