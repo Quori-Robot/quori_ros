@@ -26,6 +26,6 @@ void main()
     vec2 RADIUS = SIZE / i_resolution.xy;
     vec2 uv = gl_FragCoord.xy / i_resolution.xy;
     vec3 lookup = texture2D(lookup_table, TexCoord.xy).xyz;
-    vec4 color = texture2D(image, lookup.xy) * lookup.z;
+    vec4 color = texture2D(image, lookup.xy);
     FragColor = color;
 } 

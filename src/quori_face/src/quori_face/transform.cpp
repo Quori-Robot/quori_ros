@@ -9,6 +9,7 @@
 #include <thread>
 #include <memory>
 #include <vector>
+#include <cstring>
 
 using namespace quori_face;
 
@@ -196,7 +197,12 @@ Vector2<double> quori_face::transform(const TransformStaticParameters &static_pa
 
 float *quori_face::generateLookupTable(const TransformStaticParameters &static_params, const SphericalCoordinate &min, const SphericalCoordinate &max, const Vector2<std::uint32_t> &size)
 {
-  float *const lookup_table = new float[static_params.screen_size.x * static_params.screen_size.y * 3];
+  const std::size_t lookup_table_size = static_params.screen_size.x * static_params.screen_size.y * 3;
+  float *const lookup_table = new float[lookup_table_size];
+  for (std::size_t i = 0; i < lookup_table_size; ++i)
+  {
+
+  }
   const double theta_range = max.theta - min.theta;
   const double psi_range = max.psi - min.psi;
 
@@ -213,16 +219,24 @@ float *quori_face::generateLookupTable(const TransformStaticParameters &static_p
           min.psi + frac_x * psi_range
         ));
 
-        const auto tx = clamp<std::size_t>(0, t.x, static_params.screen_size.x - 1);
-        const auto ty = clamp<std::size_t>(0, t.y, static_params.screen_size.y - 1);
+        const std::size_t t_x = t.x;
+        const std::size_t t_y = t.y;
+
+        const auto tx = clamp<std::size_t>(0, t_x, static_params.screen_size.x - 1);
+        const auto ty = clamp<std::size_t>(0, t_y, static_params.screen_size.y - 1);
+
+        if ((tx != t_x || ty != t_y))
+        {
+          // std::cout << "clamped " << y << ", " << x <<
+        }
 
         const std::size_t index = (ty * static_params.screen_size.x + tx) * 3;
         
         lookup_table[index + 0] = frac_x;
-        lookup_table[index + 1] = 1.0 - frac_y;
+        lookup_table[index + 1] = frac_y;
 
-        // Was the value clamped? Used for masking
-        lookup_table[index + 2] = (tx != t.x || ty != t.y) ? 1.0 : 0;
+        // Marker for pixel validity.
+        lookup_table[index + 2] = 1.0;
       }
     }
   };

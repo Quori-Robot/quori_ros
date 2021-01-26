@@ -176,10 +176,10 @@ int main(int argc, char *argv[])
   config.dy = static_params.delta.y;
   config.center_theta = center.theta;
   config.center_psi = center.psi;
-  config.min_theta = center.theta - min_coord.theta;
-  config.min_psi = center.psi - min_coord.psi;
-  config.max_theta = center.theta - max_coord.theta;
-  config.max_psi = center.psi - max_coord.psi;
+  config.min_theta = min_coord.theta - center.theta;
+  config.min_psi = min_coord.psi - center.psi;
+  config.max_theta = max_coord.theta - center.theta;
+  config.max_psi = max_coord.psi - center.psi;
   reconfigure_server.updateConfig(config);
 
   const auto generate_lookup_table = [&]() {
@@ -357,7 +357,7 @@ int main(int argc, char *argv[])
     }
 
 
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     QUORI_FACE_NODE_TRACE(glActiveTexture(GL_TEXTURE1));

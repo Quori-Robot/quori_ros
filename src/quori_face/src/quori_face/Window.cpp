@@ -22,6 +22,8 @@ Window::Window(const std::uint32_t width, const std::uint32_t height, const std:
   window_ = QUORI_FACE_TRACE(glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr));
   if (!window_) throwGlfwError();
 
+  glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
   execute([] {
     QUORI_FACE_TRACE(gl3wInit());
   });
@@ -31,6 +33,9 @@ Window::Window(const std::uint32_t width, const std::uint32_t height, const std:
 {
   window_ = QUORI_FACE_TRACE(glfwCreateWindow(width, height, name.c_str(), monitor->getHandle(), nullptr));
   if (!window_) throwGlfwError();
+
+  glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
 
   execute([] {
     QUORI_FACE_TRACE(gl3wInit());
