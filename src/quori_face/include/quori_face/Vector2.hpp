@@ -6,21 +6,34 @@
 
 namespace quori_face
 {
+  /**
+   * \class Vector2
+   * A 2D vector
+   * 
+   * \tparam T The element types
+   */
   template<typename T>
   struct Vector2
   {
+    /**
+     * \fn Vector2
+     * \brief Construct a zero'd Vector2
+     */
     Vector2()
       : x(T())
       , y(T())
     {
     }
 
+    /**
+     * \fn Vector2
+     */
     Vector2(const T x, const T y)
       : x(x)
       , y(y)
     {
     }
-
+    
     T x;
     T y;
 
@@ -81,8 +94,6 @@ namespace quori_face
       y /= rhs.y;
       return *this;
     }
-
-
   };
 }
 

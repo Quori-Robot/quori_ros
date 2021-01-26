@@ -198,11 +198,13 @@ float *quori_face::generateLookupTable(const TransformStaticParameters &static_p
         const auto tx = clamp<std::size_t>(0, t.x, static_params.screen_size.x - 1);
         const auto ty = clamp<std::size_t>(0, t.y, static_params.screen_size.y - 1);
 
-
         const std::size_t index = (ty * static_params.screen_size.x + tx) * 3;
+        
         lookup_table[index + 0] = (float)x / size.x;
         lookup_table[index + 1] = (float)y / size.y;
-        lookup_table[index + 2] = 0;
+
+        // Was the value clamped? Used for masking
+        lookup_table[index + 2] = (tx != t.x || ty != t.y) ? 1.0 : 0;
       }
     }
   };

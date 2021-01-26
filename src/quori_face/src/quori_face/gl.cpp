@@ -20,7 +20,6 @@ namespace
     // FIXME: This isn't thread-safe
     if (is_inited) return true;
 
-    std::cout << "glfwInit" << std::endl;
     if (!QUORI_FACE_TRACE(glfwInit()))
     {
       std::cerr << "GLFW initialization failed" << std::endl;

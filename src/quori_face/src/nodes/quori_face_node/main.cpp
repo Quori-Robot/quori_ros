@@ -54,6 +54,18 @@ namespace
   std::atomic<bool> static_params_updated(false);
   TransformStaticParameters static_params(TransformStaticParameters::DEFAULT);
 
+  SphericalCoordinate center(SphericalCoordinate::CENTER);
+
+  SphericalCoordinate min_coord = {
+    .theta = -M_PI * 0.45,
+    .psi = -M_PI * 0.5
+  };
+
+  SphericalCoordinate max_coord = {
+    .theta = M_PI * 0.15,
+    .psi = M_PI * 0.5
+  };
+
   void reconfigureCallback(CalibrationConfig &calibration, uint32_t level)
   {
     static bool debounce = true;
@@ -63,8 +75,19 @@ namespace
       return;
     }
     std::cout << "dynamic reconfigure!" << std::endl;
+    
     static_params.delta.x = calibration.dx;
     static_params.delta.y = calibration.dy;
+    
+    center.theta = calibration.center_theta;
+    center.psi = calibration.center_psi;
+    
+    min_coord.theta = center.theta + calibration.min_theta;
+    min_coord.psi = center.psi + calibration.min_psi;
+
+    max_coord.theta = center.theta + calibration.max_theta;
+    max_coord.psi = center.psi + calibration.max_psi;
+
     static_params_updated = true;
   }
 
@@ -80,15 +103,7 @@ namespace
     .y = 720
   };
 
-  const SphericalCoordinate MIN = {
-    .theta = SphericalCoordinate::CENTER.theta - M_PI * 0.45,
-    .psi = SphericalCoordinate::CENTER.psi - M_PI * 0.5
-  };
-
-  const SphericalCoordinate MAX = {
-    .theta = SphericalCoordinate::CENTER.theta + M_PI * 0.15,
-    .psi = SphericalCoordinate::CENTER.psi + M_PI * 0.5
-  };
+  
 
   const std::unordered_map<std::string, std::uint32_t> ENCODING_GL_MAPPINGS {
     { sensor_msgs::image_encodings::RGB8, GL_RGB },
@@ -140,21 +155,32 @@ int main(int argc, char *argv[])
 
   const auto lookup_table_resolution = param(pnh, "lookup_resolution", LOOKUP_TABLE_RESOLUTION);
   const auto image_resolution = param(pnh, "image_resolution", IMAGE_RESOLUTION);
-  const auto min = param(pnh, "min", MIN);
-  const auto max = param(pnh, "max", MAX);
+  center = param(pnh, "center", center);
+  min_coord = param(pnh, "min", min_coord);
+  min_coord.theta += center.theta;
+  min_coord.psi += center.psi;
+  max_coord = param(pnh, "max", max_coord);
+  max_coord.theta += center.theta;
+  max_coord.psi += center.psi;
 
-  const auto static_params = param(pnh, "transform", TransformStaticParameters::DEFAULT);
+  static_params = param(pnh, "transform", static_params);
 
   CalibrationConfig config;
   config.dx = static_params.delta.x;
   config.dy = static_params.delta.y;
+  config.center_theta = center.theta;
+  config.center_psi = center.psi;
+  config.min_theta = min_coord.theta;
+  config.min_psi = min_coord.psi;
+  config.max_theta = max_coord.theta;
+  config.max_psi = max_coord.psi;
   reconfigure_server.updateConfig(config);
 
   const auto generate_lookup_table = [&]() {
     const auto start_time = std::chrono::system_clock::now();
     cout << "Updating lookup table (this may take several seconds)...";
     cout.flush();
-    GLfloat *const ret = generateLookupTable(static_params, min, max, lookup_table_resolution);
+    GLfloat *const ret = generateLookupTable(static_params, min_coord, max_coord, lookup_table_resolution);
     const auto end_time = std::chrono::system_clock::now();
     cout << " done (took " << std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count() << "ms)" << endl;
     return ret;
@@ -267,7 +293,14 @@ int main(int argc, char *argv[])
       continue;
     }
 
-    cv::Mat image(cv::Size(latest_image->width, latest_image->height), cv_it->second, const_cast<uint8_t *>(latest_image->data.data()), latest_image->step);
+
+    const cv::Mat image(
+      cv::Size(latest_image->width, latest_image->height),
+      cv_it->second,
+      // We pinky promise not to modify the constant image data
+      const_cast<uint8_t *>(latest_image->data.data()),
+      latest_image->step
+    );
     
     const auto cvt_it = ENCODING_CV_CVT_MAPPINGS.find(latest_image->encoding);
     if (cvt_it == ENCODING_CV_CVT_MAPPINGS.cend())
@@ -283,14 +316,11 @@ int main(int argc, char *argv[])
     }
     else
     {
-      std::cout << "cvt color " << cvt_it->second.get() << std::endl;
       cv::cvtColor(image, final_image, cvt_it->second.get());
     }
 
     if (final_image.rows != image_resolution.y || final_image.cols != image_resolution.x)
     {
-      std::cout << "resize" << std::endl;
-
       cv::resize(final_image, final_image, cv::Size(image_resolution.x, image_resolution.y));
     }
 

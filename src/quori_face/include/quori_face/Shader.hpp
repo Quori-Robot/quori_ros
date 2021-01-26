@@ -22,9 +22,33 @@ namespace quori_face
 
     ~Shader();
 
+    /**
+     * \fn compile
+     * \brief Compile a shader from source
+     * 
+     * \param[in] type The shader type
+     * \param[in] buffer The shader program source code
+     * \param[in] length The buffer length in bytes
+     * 
+     * \return A Shader object
+     */
     static Ptr compile(const Type type, const std::uint8_t *const buffer, const std::size_t length);
+    
+    /**
+     * \fn compile
+     * \brief Compile a shader from source
+     * 
+     * \param[in] type The shader type
+     * \param[in] str The shader program source code
+     * 
+     * \return A Shader object
+     */
     static Ptr compile(const Type type, const std::string &str);
 
+    /**
+     * \fn getHandle
+     * \return The underlying OpenGL handle
+     */
     std::uint32_t getHandle() const;
 
   private:

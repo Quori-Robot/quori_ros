@@ -93,6 +93,8 @@ namespace quori_face
    * \return A 2D pixel location
    */
   Vector2<double> transform(const TransformStaticParameters &static_params, const SphericalCoordinate &coord);
+
+  
   float *generateLookupTable(const TransformStaticParameters &static_params, const SphericalCoordinate &min, const SphericalCoordinate &max, const Vector2<std::uint32_t> &size);
 }
 

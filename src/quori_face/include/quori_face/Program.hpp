@@ -8,6 +8,10 @@
 
 namespace quori_face
 {
+  /**
+   * \class Program
+   * Represents a shader pipeline program
+   */
   class Program
   {
   public:
@@ -16,12 +20,29 @@ namespace quori_face
 
     ~Program();
 
+    /**
+     * \fn link
+     * Construct a program with the given shader pipeline.
+     * \param[in] shaders The shader pipeline, in order
+     */
     static Ptr link(const std::initializer_list<Shader::Ptr> &shaders);
 
+    /**
+     * \fn getUniformLocation
+     */
     std::uint32_t getUniformLocation(const std::string &name) const;
 
+    /**
+     * \fn use
+     * 
+     * Bind the program to the current OpenGL context
+     */
     void use();
 
+    /**
+     * \fn getHandle
+     * \return The underlying OpenGL handle
+     */
     std::uint32_t getHandle() const;
 
   private:

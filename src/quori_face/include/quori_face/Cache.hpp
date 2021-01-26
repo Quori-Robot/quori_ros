@@ -8,15 +8,36 @@
 
 namespace quori_face
 {
+  /**
+   * \class Cache
+   * \brief A simple memoization object that eliminates repetitive
+   * computations.
+   * 
+   * \tparam K The key type
+   * \tparam V The value type
+   */
   template<typename K, typename V>
   class Cache
   {
   public:
+    /**
+     * \fn Cache
+     * 
+     * \param[in] size The maximum cache size
+     */
     Cache(const std::size_t size = 5UL)
       : size_(size)
     {
     }
 
+    /**
+     * \fn getOrCompute
+     * 
+     * Get a value, either from cache, or by executing the function f.
+     * 
+     * \param[in] key The key to lookup
+     * \param[in] f The function to execute to generate the value if not found in the cache
+     */
     const V &getOrCompute(const K &key, const std::function<V (const K &k)> &f)
     {
       std::lock_guard<std::mutex> guard(mut_);

@@ -3,6 +3,10 @@
 
 namespace quori_face
 {
+  /**
+   * \fn checkGlError
+   * \brief Throws a `std::runtime_error` if the OpenGL error flag is set
+   */
   void checkGlError();
 }
 

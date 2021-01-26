@@ -1,0 +1,9 @@
+<launch>
+  <node name="quori_face" pkg="quori_face" type="quori_face_node" ns="/quori/face" output="screen" respawn="false" required="true">
+    <rosparam file="$(find quori_face)/config/params.yaml" command="load"/>
+  </node>
+  <node name="dynamic_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" ns="/quori/face" output="screen" respawn="false" required="true">
+  </node>
+  <node name="image_publisher" pkg="image_publisher" type="image_publisher" output="screen" respawn="true" required="true">
+  </node>
+</launch>

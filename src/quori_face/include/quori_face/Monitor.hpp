@@ -8,6 +8,11 @@ struct GLFWmonitor;
 
 namespace quori_face
 {
+  /**
+   * \class Monitor
+   * 
+   * Represents a display connected to the computer
+   */
   class Monitor
   {
   public:
@@ -16,13 +21,34 @@ namespace quori_face
 
     ~Monitor();
 
+    /**
+     * \fn getMonitors
+     * \return A list of the monitors connected to the computer
+     */
     static std::vector<Monitor::Ptr> getMonitors();
+
+    /**
+     * \fn getPrimaryMonitor
+     * \return The primary monitor connected to the computer
+     */
     static Monitor::Ptr getPrimaryMonitor();
 
-
+    /**
+     * \fn isPrimary
+     * \return true if the monitor is the primary one, false otherwise
+     */
     bool isPrimary() const;
+
+    /**
+     * \fn getName
+     * \return The OS-defined name of the monitor
+     */
     std::string getName() const;
 
+    /**
+     * \fn getHandle
+     * \return The underlying GLFW window pointer
+     */
     GLFWmonitor *getHandle() const;
 
   private:

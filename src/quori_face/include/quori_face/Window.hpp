@@ -14,6 +14,10 @@ namespace quori_face
 {
   class WindowManager;
 
+  /**
+   * \class Window
+   * Represents an operating system Window backed by an OpenGL context
+   */
   class Window : public std::enable_shared_from_this<Window>
   {
   public:
@@ -24,7 +28,17 @@ namespace quori_face
 
     ~Window();
 
+    /**
+     * \fn close
+     * 
+     * Close the window. All calls that use the underlying window handle will fail.
+     */
     void close();
+
+    /**
+     * \fn isClosed
+     * \return True if close() has been called, false otherwise
+     */
     bool isClosed() const;
 
     static void pollEvents();
