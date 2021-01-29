@@ -108,7 +108,7 @@ std::string extract_value(const std::string &text, const std::string &key)
 
 DeviceInfo device_info(const path &device_path)
 {
-  const std::string output = run("/sbin/udevadm", { "info", device_path.string() });
+  const std::string output = run("/usr/bin/udevadm", { "info", device_path.string() });
   DeviceInfo ret;
   ret.device_path = device_path;
   ret.id_vendor = extract_value(output, "ID_VENDOR");
