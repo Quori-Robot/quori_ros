@@ -101,7 +101,7 @@ std::string extract_value(const std::string &text, const std::string &key)
     o << "Failed to find key \"" << key << "\"";
     throw std::runtime_error(o.str());
   }
-  const std::size_t begin = index + key.size() + 1;
+  const std::size_t begin = index + key.size();
   const std::size_t end = text.find("\n", begin);
   return text.substr(begin, end - begin);
 }
@@ -111,8 +111,8 @@ DeviceInfo device_info(const path &device_path)
   const std::string output = run("/usr/bin/udevadm", { "info", device_path.string() });
   DeviceInfo ret;
   ret.device_path = device_path;
-  ret.id_vendor = extract_value(output, "ID_VENDOR");
-  ret.id_serial = extract_value(output, "ID_SERIAL_SHORT");
+  ret.id_vendor = extract_value(output, "ID_VENDOR=");
+  ret.id_serial = extract_value(output, "ID_SERIAL_SHORT=");
   return ret;
 }
 
@@ -184,15 +184,17 @@ std::string microcontroller_filename(const Microcontroller v)
 std::string udev_rule(const Microcontroller microcontroller, const std::string &serial)
 {
   std::ostringstream o;
-  o << "KERNEL==\"ttyACM[0-9]*\", SUBSYSTEM==\"tty\", ATTRS{serial}==\"" << serial << "\", SYMLINK+=\"quori/" << microcontroller_filename(microcontroller) << "\"" << std::endl;
+  o << "KERNEL==\"ttyACM[0-9]*\", SUBSYSTEM==\"tty\", ATTRS{serial}==\"" << serial << "\", SYMLINK+=\"quori/" << microcontroller_filename(microcontroller) << "\", MODE=\"0666\"" << std::endl;
   return o.str();
 }
 
 int main(int argc, char *argv[])
 {
-  std::cout << sizeof(quori::message::Initialize) << std::endl;
+  std::cout << "sizeof " << sizeof(quori::message::Initialize) << std::endl;
   // Iterate through the /dev directory, finding devices of the form "ttyACM*"
   std::vector<DeviceInfo> teensys;
+  std::unordered_map<Microcontroller, std::string> serials;
+
   for (directory_iterator it("/dev"); it != directory_iterator(); ++it)
   {
     if (it->path().filename().string().find("ttyACM") == std::string::npos) continue;
@@ -200,8 +202,14 @@ int main(int argc, char *argv[])
     // Each USB device has a VENDOR property we can introspect on.
     // We only want Arduino Teensys
     const DeviceInfo info = device_info(it->path());
+
+    if (info.id_vendor == "STMicroelectronics")
+    {
+      serials.insert({ Microcontroller::Base, info.id_serial });
+      continue;
+    }
     
-    if (info.id_vendor != "Teensyduino" && info.id_vendor != "STMicroelectronics") continue;
+    if (info.id_vendor != "Teensyduino") continue;
     
     teensys.push_back(info);
   }
@@ -211,7 +219,6 @@ int main(int argc, char *argv[])
   boost::asio::io_service service;
 
 
-  std::unordered_map<Microcontroller, std::string> serials;
 
   std::cout << "Discovering mappings... ";
   std::cout.flush();
@@ -304,6 +311,10 @@ int main(int argc, char *argv[])
   {
     rules << udev_rule(mapping.first, mapping.second);
   }
+
+  // Make all ttyUSB* devices user-rw as well
+  rules <<  "KERNEL==\"ttyUSB[0-9]*\", SUBSYSTEM==\"usb\", MODE=\"0666\"" << std::endl;
+
   rules.close();
 
   std::cout << "Successfully wrote udev rules!" << std::endl;
@@ -331,6 +342,8 @@ int main(int argc, char *argv[])
       break;
     }
   }
+
+  
 
   if (should_reboot)
   {
