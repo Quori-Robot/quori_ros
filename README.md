@@ -4,7 +4,7 @@ This catkin workspace contains all of the ROS packages necessary for full operat
 
 ## Prerequisites
 
-The package is compatible with **Ubuntu 16.04** and **ROS Kinetic**, built with the **Catkin** system. Make sure you have the right environment configured.
+The package is compatible with **Ubuntu 16.04 / ROS Kinetic** and **Ubuntu 20.04 / ROS Noetic**, built with the **Catkin** system. Make sure you have the right environment configured.
 
 ### External Dependencies
 
