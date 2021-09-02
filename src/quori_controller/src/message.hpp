@@ -5,7 +5,7 @@
 #include <string>
 #include <string.h>
 
-#define QUORI_MESSAGE __attribute__((packed, aligned(4)))
+#define QUORI_MESSAGE __attribute__((packed))
 
 namespace quori
 {
@@ -103,6 +103,7 @@ namespace quori
     {
       Log();
       uint8_t marker;
+      char message[32];
     };
 
     struct QUORI_MESSAGE States

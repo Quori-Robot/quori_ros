@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/posix/stream_descriptor.hpp>
+#include <boost/asio/write.hpp>
+#include <boost/asio/read.hpp>
 
 #include <vector>
 #include <ros/time.h>
@@ -48,6 +50,28 @@ namespace quori_controller
     SerialDevice(boost::asio::posix::stream_descriptor &&fd, const std::string &name);
 
     void read();
+
+    template<typename T>
+    size_t write(const T &msg)
+    {
+      boost::system::error_code ec;
+
+      /*std::cerr << "write ";
+      for (std::size_t i = 0; i < sizeof(msg); ++i)
+      {
+        std::cerr << std::hex << (int)reinterpret_cast<const uint8_t *>(&msg)[i] << std::dec << " ";
+      }
+      std::cerr << std::endl;
+*/
+      const size_t res = boost::asio::write(fd_, boost::asio::buffer(reinterpret_cast<const uint8_t *>(&msg), sizeof(msg)), boost::asio::transfer_all(), ec);
+
+      if (ec)
+      {
+        throw boost::system::system_error(ec);
+      }
+
+      return res;
+    }
 
 
     boost::asio::posix::stream_descriptor fd_;

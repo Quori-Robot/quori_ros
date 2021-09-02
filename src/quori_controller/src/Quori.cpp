@@ -250,6 +250,8 @@ void Quori::on_base_vel_status_(const geometry_msgs::Vector3::ConstPtr &msg)
 
 void Quori::on_base_turret_pos_(const std_msgs::Float32::ConstPtr &msg)
 {
+  if (!base_turret_) return;
+  
   // The received position is in negative revolutions, convert to radians
   base_turret_->position = -msg->data * TAU;
 

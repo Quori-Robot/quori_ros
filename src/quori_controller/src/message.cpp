@@ -46,6 +46,7 @@ SetLimit::SetLimit()
 Log::Log()
   : marker(static_cast<uint8_t>(Type::Log))
 {
+  memset(message, 0, sizeof(message));
 }
 
 States::States()

@@ -11,7 +11,7 @@
 
   <!-- load the controllers -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-    output="screen" ns="/quori" args="joint_trajectory_controller joint_state_controller base_turret_controller base_controller"/>
+    output="screen" ns="/quori" args="joint_trajectory_controller joint_state_controller base_controller"/>
 
   
   <node name="quori_joint_states_publisher" pkg="quori_joint_states_publisher" type="node"
