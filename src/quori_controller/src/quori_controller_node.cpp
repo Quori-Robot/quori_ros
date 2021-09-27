@@ -33,17 +33,33 @@ int main(int argc, char *argv[])
     return EXIT_FAILURE;
   }
 
+  bool generate_csvs = false;
+  pnh.getParam("generate_csvs", generate_csvs);
+
   boost::asio::io_service service;
   std::vector<SerialDevice::Ptr> serial_devices;
+  std::unique_ptr<std::ofstream> csv_file;
+  Csv::Ptr csv;
+  
+  
+  if (generate_csvs)
+  {
+    csv_file = std::make_unique<std::ofstream>("out.csv");
+    if (!*csv_file) throw std::runtime_error("Could not open csv file");
+    csv = Csv::open(*csv_file);
+    std::cerr << "Opened CSV" << std::endl;
+  }
+
   for (const auto &device : devices)
   {
-    serial_devices.push_back(SerialDevice::open(service, device));
+    const auto serial_device = SerialDevice::open(service, device);
+    if (csv) serial_device->attachSetPositionsCsv(csv);
+    serial_devices.push_back(serial_device);
   }
 
   
   Quori robot(nh, serial_devices);
 
-  
   controller_manager::ControllerManager cm(&robot, nh);
 
   double rate_hz = pnh.param("rate", 100.0);

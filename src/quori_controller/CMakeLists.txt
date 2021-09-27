@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(quori_controller)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11 -g)
+add_compile_options(-std=c++14 -g)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   hardware_interface
   controller_manager
   roscpp
+  dynamic_reconfigure
 )
 
 ## System dependencies are found with CMake's conventions
@@ -88,10 +89,9 @@ find_package(catkin REQUIRED COMPONENTS
 ##     and list every .cfg file to be processed
 
 ## Generate dynamic reconfigure parameters in the 'cfg' folder
-# generate_dynamic_reconfigure_options(
-#   cfg/DynReconf1.cfg
-#   cfg/DynReconf2.cfg
-# )
+generate_dynamic_reconfigure_options(
+  cfg/Calibrate.cfg
+)
 
 ###################################
 ## catkin specific configuration ##
@@ -136,6 +136,7 @@ include_directories(
 add_executable(${PROJECT_NAME}_node
   src/quori_controller_node.cpp
   src/Quori.cpp
+  src/Csv.cpp
   src/SerialDevice.cpp
   src/Joint.cpp
   src/message.cpp
@@ -144,6 +145,7 @@ add_executable(${PROJECT_NAME}_node
 add_executable(${PROJECT_NAME}_init
   src/init.cpp
   src/Quori.cpp
+  src/Csv.cpp
   src/SerialDevice.cpp
   src/Joint.cpp
   src/message.cpp
@@ -179,12 +181,6 @@ target_link_libraries(${PROJECT_NAME}_init
 # all install targets should use catkin DESTINATION variables
 # See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
 
-## Mark executable scripts (Python etc.) for installation
-## in contrast to setup.py, you can choose the destination
-# install(PROGRAMS
-#   scripts/my_python_script
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
 
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html

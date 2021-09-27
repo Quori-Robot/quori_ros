@@ -146,6 +146,27 @@ void SerialDevice::setPositions(const double *const positions, const std::size_t
   }
 
   auto res = *reinterpret_cast<const quori::message::SetPositionsRes *>(unprocessed_.data());
+  
+  auto seconds = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+  
+  if (name_ == "/dev/quori/right_arm")
+  {
+    std::cerr << "[" << seconds << "] Set positions " << name_ << " "
+    << res.values[0]
+    << " "
+    << res.values[1]
+    << std::endl;
+  }
+
+  if (set_positions_csv_)
+  {
+    using namespace std::chrono;
+
+    const auto time = duration_cast<microseconds>(system_clock::now().time_since_epoch());
+    set_positions_csv_->append() << name_ << time.count() << res.values[0] << res.values[1];
+  }
+  
+
   unprocessed_.erase(unprocessed_.begin(), unprocessed_.begin() + sizeof(quori::message::SetPositionsRes));
 }
 
@@ -165,6 +186,7 @@ void SerialDevice::set(const double *const positions, const double *const veloci
   {
     read();
   }
+
   auto res = *reinterpret_cast<const quori::message::SetPositionsRes *>(unprocessed_.data());
   unprocessed_.erase(unprocessed_.begin(), unprocessed_.begin() + sizeof(quori::message::SetPositionsRes));
 }
@@ -202,4 +224,17 @@ void SerialDevice::read()
     std::cout << name_ << ": " << msg->message << std::endl;
     unprocessed_.erase(unprocessed_.begin(), unprocessed_.begin() + sizeof(quori::message::Log));
   }
+}
+
+void SerialDevice::attachSetPositionsCsv(const Csv::Ptr &csv)
+{
+  set_positions_csv_ = csv;
+  set_positions_csv_->append() << "Device" << "Time" << "M1 Sensor" << "M2 Sensor";
+}
+
+Csv::Ptr SerialDevice::detachSetPositionsCsv()
+{
+  Csv::Ptr ret = set_positions_csv_;
+  set_positions_csv_.reset();
+  return ret;
 }

@@ -8,9 +8,9 @@ quori:
     joints:
       - right_arm_r1
       - right_arm_r2
-      - left_arm_r1
-      - left_arm_r2
-      - waist_hinge
+      # - left_arm_r1
+      # - left_arm_r2
+      # - waist_hinge
 
   base_controller:
     type: diff_drive_controller/DiffDriveController

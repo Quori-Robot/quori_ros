@@ -6,6 +6,7 @@
 
   <node name="quori_controller" pkg="quori_controller" type="node" ns="/quori" output="screen" respawn="false" required="true">
     <rosparam file="$(find quori_controller)/config/quori_controller_params.yaml" command="load"/>
+    <rosparam file="$(find quori_controller)/config/calibration.yaml" command="load"/>
   </node>
 
   <!-- load the controllers -->

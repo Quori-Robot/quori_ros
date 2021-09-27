@@ -10,6 +10,9 @@
 #include <vector>
 #include <ros/time.h>
 
+#include <optional>
+#include "Csv.hpp"
+
 #include "message.hpp"
 
 #include "Joint.hpp"
@@ -46,6 +49,9 @@ namespace quori_controller
 
     void getState(quori::message::States &states);
 
+    void attachSetPositionsCsv(const Csv::Ptr &csv);
+    Csv::Ptr detachSetPositionsCsv();
+
   private:
     SerialDevice(boost::asio::posix::stream_descriptor &&fd, const std::string &name);
 
@@ -56,13 +62,6 @@ namespace quori_controller
     {
       boost::system::error_code ec;
 
-      /*std::cerr << "write ";
-      for (std::size_t i = 0; i < sizeof(msg); ++i)
-      {
-        std::cerr << std::hex << (int)reinterpret_cast<const uint8_t *>(&msg)[i] << std::dec << " ";
-      }
-      std::cerr << std::endl;
-*/
       const size_t res = boost::asio::write(fd_, boost::asio::buffer(reinterpret_cast<const uint8_t *>(&msg), sizeof(msg)), boost::asio::transfer_all(), ec);
 
       if (ec)
@@ -84,5 +83,6 @@ namespace quori_controller
 
     std::vector<std::uint8_t> unprocessed_;
 
+    Csv::Ptr set_positions_csv_;
   };
 }

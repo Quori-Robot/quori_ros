@@ -1,9 +1,10 @@
 devices:
   - /dev/quori/right_arm
-  - /dev/quori/left_arm
-  - /dev/quori/waist
+  # - /dev/quori/left_arm
+  # - /dev/quori/waist
 home_cmds:
   left_arm_r1: 0
   left_arm_r2: -1.0
   right_arm_r1: 0
   right_arm_r2: -1.0
+generate_csvs: true
