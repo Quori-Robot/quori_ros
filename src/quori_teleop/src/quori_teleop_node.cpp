@@ -208,7 +208,7 @@ int main(int argc, char *argv[])
     
     traj.header.seq = traj.header.seq + 1;
     traj.header.stamp = ros::Time::now();
-    // joint_traj_command.publish(traj);
+    joint_traj_command.publish(traj);
 
     rate.sleep();
   }
