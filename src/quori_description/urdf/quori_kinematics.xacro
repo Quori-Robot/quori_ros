@@ -44,12 +44,12 @@
     </inertial>
   </link>
 
-  <joint name="right_arm_r1" type="continuous">
+  <joint name="right_arm_r1" type="revolute">
     <origin xyz="0.015 -0.16403066 0.43021758" rpy="0 0 0"/>
     <parent link="quori/upper_torso"/>
     <child link="quori/right_arm_base"/>
     <axis xyz="0 -1 0" />
-    <limit effort="1" velocity="1"/>
+    <limit lower="-2.4" upper="2.4" effort="1" velocity="1"/>
   </joint>
 
   <link name="quori/right_arm_upper">
@@ -125,12 +125,12 @@
     </inertial>
   </link>
 
-  <joint name="left_arm_r1" type="continuous">
+  <joint name="left_arm_r1" type="revolute">
     <origin xyz="0.015 0.16403066 0.43021758" rpy="0 0 0"/>
     <parent link="quori/upper_torso"/>
     <child link="quori/left_arm_base"/>
     <axis xyz="0 1 0" />
-    <limit effort="1" velocity="1"/>
+    <limit lower="-2.4" upper="2.4" effort="1" velocity="1"/>
   </joint>
 
   <link name="quori/left_arm_upper">
