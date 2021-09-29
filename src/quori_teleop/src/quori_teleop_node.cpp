@@ -139,22 +139,24 @@ void on_joy(const sensor_msgs::Joy::ConstPtr &msg)
   boost::optional<double> waist_hinge;
 
   // Left Arm Control
-  if (state.left_trigger_2 < 0.5)
+  if (state.left_trigger_2 < -0.5)
   {
-    // std::cout << "Left arm control " << state.left_stick[0] << std::endl;
+    std::cout << "Left arm control " << state.left_stick[0] << std::endl;
     left_arm_r1 = state.left_stick[1] * 2 * (state.a_button ? 2 : 1);
     left_arm_r2 = state.left_stick[0] * 2 * (state.a_button ? 2 : 1);
   }
   // Right Arm Control
-  else if (state.right_trigger_2 < 0.5)
+  else if (state.right_trigger_2 < -0.5)
   {
-    // std::cout << "Right arm control " << state.left_stick[0] << std::endl;
+    std::cout << "Right arm control " << state.left_stick[0] << std::endl;
     right_arm_r1 = state.left_stick[1] * 2 * (state.a_button ? 2 : 1);
     right_arm_r2 = state.left_stick[0] * 2 * (state.a_button ? 2 : 1);
   }
   // Base Control
   else if (state.left_trigger_1)
   {
+    std::cout << "Base control " << state.left_stick[0] << std::endl;
+
     vel.linear.x = state.left_stick[1] / 8 * (state.a_button ? 2 : 1);
     vel.linear.y = -state.left_stick[0] / 8 * (state.a_button ? 2 : 1);
     vel.angular.z = -state.right_stick[0] / 2 * (state.a_button ? 2 : 1);
@@ -162,6 +164,8 @@ void on_joy(const sensor_msgs::Joy::ConstPtr &msg)
   // Hinge Control
   else if (state.right_trigger_1)
   {
+    std::cout << "Waist control " << state.left_stick[0] << std::endl;
+
     waist_hinge = state.left_stick[1] / 3.5;
   }
 
@@ -204,7 +208,7 @@ int main(int argc, char *argv[])
     
     traj.header.seq = traj.header.seq + 1;
     traj.header.stamp = ros::Time::now();
-    joint_traj_command.publish(traj);
+    // joint_traj_command.publish(traj);
 
     rate.sleep();
   }
