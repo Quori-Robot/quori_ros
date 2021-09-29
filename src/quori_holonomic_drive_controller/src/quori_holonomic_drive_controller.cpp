@@ -42,8 +42,14 @@ bool QuoriHolonomicDriveController::init(hardware_interface::VelocityJointInterf
   left_joint_ = hw->getHandle("base_left");
   right_joint_ = hw->getHandle("base_right");
   turret_joint_ = hw->getHandle("base_turret");
+  x_joint_ = hw->getHandle("base_x");
+  y_joint_ = hw->getHandle("base_y");
+  angle_joint_ = hw->getHandle("base_angle");
+  base_mode_joint_ = hw->getHandle("base_mode");
 
   sub_command_ = controller_nh.subscribe("cmd_vel", 1, &QuoriHolonomicDriveController::cmdVelCallback, this);
+
+  return true;
 }
 
 typedef Eigen::Transform<double, 3, Eigen::Affine> Transform3d;
@@ -137,17 +143,12 @@ void QuoriHolonomicDriveController::update(const ros::Time &time, const ros::Dur
 
   // The X and Y axes represented by the x_joint_ and y_joint_ do not rotate
   // with the base_link. We map the linear X vel and linear Y vel to these axes.
-  HolonomicCommand command = {
-    .lin_x_vel = curr_cmd.lin_x,
-    .lin_y_vel = curr_cmd.lin_y,
-    .ang_z_vel = curr_cmd.ang,
-  };
 
-  const DiffDriveCommand diff_drive_cmd = compute_ramsis_jacobian(command, -turret_joint_.getPosition(), holonomic_params_);
-
-  left_joint_.setCommand(diff_drive_cmd.motor_left_vel);
-  right_joint_.setCommand(diff_drive_cmd.motor_right_vel);
-  turret_joint_.setCommand(diff_drive_cmd.motor_turret_vel);
+  x_joint_.setCommand(curr_cmd.lin_x);
+  y_joint_.setCommand(curr_cmd.lin_y);
+  angle_joint_.setCommand(curr_cmd.ang);
+  std::cout << "curr cmd " << curr_cmd.lin_x << " " << curr_cmd.lin_y << " " << curr_cmd.ang << std::endl;
+  base_mode_joint_.setCommand(1.0);
 
   // publishWheelData(time, period, curr_cmd, ws, lwr, rwr);
   time_previous_ = time;
@@ -171,9 +172,9 @@ void QuoriHolonomicDriveController::stopping(const ros::Time &time)
 
 void QuoriHolonomicDriveController::brake()
 {
-  left_joint_.setCommand(0.0);
-  right_joint_.setCommand(0.0);
-  turret_joint_.setCommand(0.0);
+  x_joint_.setCommand(0.0);
+  y_joint_.setCommand(0.0);
+  angle_joint_.setCommand(0.0);
 }
 
 void QuoriHolonomicDriveController::setOdomPubFields(ros::NodeHandle &root_nh, ros::NodeHandle &controller_nh)
@@ -229,6 +230,8 @@ void QuoriHolonomicDriveController::setOdomPubFields(ros::NodeHandle &root_nh, r
 
 void QuoriHolonomicDriveController::cmdVelCallback(const geometry_msgs::Twist &command)
 {
+
+  std::cout << "CMD VEL" << std::endl;
   if (!isRunning())
   {
     ROS_ERROR_NAMED(name_, "Can't accept new commands. Controller is not running.");
@@ -249,6 +252,7 @@ void QuoriHolonomicDriveController::cmdVelCallback(const geometry_msgs::Twist &c
     ROS_WARN_THROTTLE(1.0, "Received NaN in velocity command. Ignoring.");
     return;
   }
+
 
   
 

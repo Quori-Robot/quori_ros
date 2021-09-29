@@ -66,9 +66,14 @@ namespace quori_holonomic_drive_controller
     ros::Subscriber sub_command_;
 
     // Joints
+
     hardware_interface::JointHandle left_joint_;
     hardware_interface::JointHandle right_joint_;
     hardware_interface::JointHandle turret_joint_;
+    hardware_interface::JointHandle x_joint_;
+    hardware_interface::JointHandle y_joint_;
+    hardware_interface::JointHandle angle_joint_;
+    hardware_interface::JointHandle base_mode_joint_;
 
     // Controller state requirements
     ros::Time time_previous_;
