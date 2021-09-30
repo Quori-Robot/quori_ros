@@ -1,5 +1,7 @@
 #include "Quori.hpp"
 
+#include <std_msgs/Float32.h>
+
 #include <iostream>
 #include <chrono>
 
@@ -16,14 +18,18 @@ Quori::Quori(ros::NodeHandle &nh, const std::vector<SerialDevice::Ptr> &devices)
   : nh_(nh)
   , base_vel_pub_(nh_.advertise<geometry_msgs::Vector3>("/quori/base/cmd_diff", 1))
   , base_holo_vel_pub_(nh_.advertise<geometry_msgs::Vector3>("/quori/base/cmd_holo", 1))
+  , base_offset_pub_(nh_.advertise<std_msgs::Float32>("/quori/base/cmd_offset", 1))
   , base_vel_status_(nh_.subscribe("/quori/base/vel_status", 1, &Quori::on_base_vel_status_, this))
   , base_turret_pos_(nh_.subscribe("/quori/base/pos_status", 1, &Quori::on_base_turret_pos_, this))
   , devices_(devices)
   , max_device_joints_(0)
   , device_joint_buffer_(nullptr)
+  , base_offset_(0.0)
 {
   ros::NodeHandle pnh("~");
-  // std::cout << "quori" << std::endl;
+  
+  base_offset_ = pnh.param("base_offset", base_offset_);
+  
   // Iterate through each serial device (Arduino) we've been given
   for (auto it = devices_.cbegin(); it != devices_.cend(); ++it)
   {
@@ -163,7 +169,6 @@ void Quori::read(const ros::Time &time, const ros::Duration &period)
   const auto start = std::chrono::system_clock::now();
   for(auto it = devices_.cbegin(); it != devices_.cend(); ++it)
   {
-    // std::cout << "get state " << (*it)->getName() << std::endl;
     quori::message::States &state = device_states_[*it];
     (*it)->getState(state);
     const auto &indices = device_joints_[*it];
@@ -207,7 +212,6 @@ void Quori::write(const ros::Time &time, const ros::Duration &period)
     // Collect the commands for all joints this device controls
     for (auto jit = it->second.cbegin(); jit != it->second.cend(); ++jit)
     {
-      // std::cout << joints_[*jit]->command << std::endl;
       device_joint_buffer_[i++] = joints_[*jit]->command;
     }
 
@@ -216,9 +220,12 @@ void Quori::write(const ros::Time &time, const ros::Duration &period)
     it->first->setPositions(device_joint_buffer_, i);
   }
 
+  std_msgs::Float32 offset;
+  offset.data = base_offset_;
+  base_offset_pub_.publish(offset);
+  
   if (base_mode_->command >= 0.5)
   {
-    // std::cout << "Holonomic mode " << base_x_->command << " m/s, " << base_y_->command << " m/s, " << base_angle_->command << " rad/s" << std::endl;
     geometry_msgs::Vector3 base_holo_vel;
     base_holo_vel.x = base_x_->command;
     base_holo_vel.y = -base_y_->command;
@@ -231,16 +238,11 @@ void Quori::write(const ros::Time &time, const ros::Duration &period)
     base_vel.x = WHEEL_RADIUS * -base_left_->command;
     base_vel.y = WHEEL_RADIUS * base_right_->command;
     base_vel.z = base_turret_->command / TAU * 360;
-    // std::cout << "Z " << base_vel.z << std::endl;
     base_vel_pub_.publish(base_vel);  
   }
   
-
-  
-
   const auto end = std::chrono::system_clock::now();
   // std::cout << "Write took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
-
 }
 
 void Quori::on_base_vel_status_(const geometry_msgs::Vector3::ConstPtr &msg)

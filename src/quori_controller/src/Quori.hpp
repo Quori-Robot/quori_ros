@@ -41,6 +41,7 @@ namespace quori_controller
     ros::NodeHandle &nh_;
     ros::Publisher base_vel_pub_;
     ros::Publisher base_holo_vel_pub_;
+    ros::Publisher base_offset_pub_;
     ros::Subscriber base_vel_status_;
     ros::Subscriber base_turret_pos_;
 
@@ -54,6 +55,8 @@ namespace quori_controller
     std::map<SerialDevice::Ptr, std::vector<std::size_t>> device_joints_;
     std::size_t max_device_joints_;
     double *device_joint_buffer_;
+
+    float base_offset_;
 
 
     std::unordered_map<std::string, std::size_t> joint_indices_;
