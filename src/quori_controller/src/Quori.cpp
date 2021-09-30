@@ -221,14 +221,14 @@ void Quori::write(const ros::Time &time, const ros::Duration &period)
   }
 
   std_msgs::Float32 offset;
-  offset.data = base_offset_;
+  offset.data = base_offset_ +1.0/8.0;
   base_offset_pub_.publish(offset);
   
   if (base_mode_->command >= 0.5)
   {
     geometry_msgs::Vector3 base_holo_vel;
-    base_holo_vel.x = base_x_->command;
-    base_holo_vel.y = -base_y_->command;
+    base_holo_vel.x = base_y_->command;
+    base_holo_vel.y = base_x_->command;
     base_holo_vel.z = base_angle_->command;
     base_holo_vel_pub_.publish(base_holo_vel);
   }
@@ -256,4 +256,5 @@ void Quori::on_base_turret_pos_(const std_msgs::Float32::ConstPtr &msg)
   
   // The received position is in negative revolutions, convert to radians
   base_turret_->position = -msg->data * TAU;
+  //base_turret_->position += TAU / 8;
 }
