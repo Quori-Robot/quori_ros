@@ -221,7 +221,7 @@ void Quori::write(const ros::Time &time, const ros::Duration &period)
   }
 
   std_msgs::Float32 offset;
-  offset.data = base_offset_ +1.0/8.0;
+  offset.data = base_offset_;
   base_offset_pub_.publish(offset);
   
   if (base_mode_->command >= 0.5)
@@ -256,5 +256,5 @@ void Quori::on_base_turret_pos_(const std_msgs::Float32::ConstPtr &msg)
   
   // The received position is in negative revolutions, convert to radians
   base_turret_->position = -msg->data * TAU;
-  //base_turret_->position += TAU / 8;
+  //base_turret_->position += TAU / 8.0;
 }
