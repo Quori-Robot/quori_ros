@@ -2,11 +2,8 @@
 <COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
   <asset>
     <contributor>
-      <author />
       <authoring_tool>Rhinoceros 6.1.18030.17371</authoring_tool>
       <comments>Output from Rhinoceros COLLADA Exporter</comments>
-      <copyright />
-      <source_data />
     </contributor>
     <created>2018-09-18T01:29:11Z</created>
     <modified>2018-09-18T01:29:11Z</modified>
