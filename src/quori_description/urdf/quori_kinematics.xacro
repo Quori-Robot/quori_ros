@@ -186,7 +186,7 @@
     <visual>
       <origin rpy="-1.57 3.14 0" xyz="0 0 0" />
       <geometry>
-        <mesh filename="package://quori_description/meshes/0917_Lower_Arm_right.dae" />
+        <mesh filename="package://quori_description/meshes/0917_Lower_Arm_left.dae" />
       </geometry>
     </visual>
   </link>
