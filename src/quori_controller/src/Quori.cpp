@@ -256,8 +256,4 @@ void Quori::on_base_turret_pos_(const std_msgs::Float32::ConstPtr &msg)
   
   // The received position is in negative revolutions, convert to radians
   base_turret_->position = -msg->data * TAU;
-
-  // The position appears to be incorrect by a constant offset of 45 degrees
-  // TODO: Verify this is the case on all quoris
-  base_turret_->position += TAU / 8;
 }
