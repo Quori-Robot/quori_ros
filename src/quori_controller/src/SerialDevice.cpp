@@ -148,15 +148,6 @@ void SerialDevice::setPositions(const double *const positions, const std::size_t
   auto res = *reinterpret_cast<const quori::message::SetPositionsRes *>(unprocessed_.data());
   
   auto seconds = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-  
-  if (name_ == "/dev/quori/right_arm")
-  {
-    std::cerr << "[" << seconds << "] Set positions " << name_ << " "
-    << res.values[0]
-    << " "
-    << res.values[1]
-    << std::endl;
-  }
 
   if (set_positions_csv_)
   {

@@ -147,7 +147,6 @@ void QuoriHolonomicDriveController::update(const ros::Time &time, const ros::Dur
   x_joint_.setCommand(curr_cmd.lin_x);
   y_joint_.setCommand(curr_cmd.lin_y);
   angle_joint_.setCommand(curr_cmd.ang);
-  std::cout << "curr cmd " << curr_cmd.lin_x << " " << curr_cmd.lin_y << " " << curr_cmd.ang << std::endl;
   base_mode_joint_.setCommand(1.0);
 
   // publishWheelData(time, period, curr_cmd, ws, lwr, rwr);
