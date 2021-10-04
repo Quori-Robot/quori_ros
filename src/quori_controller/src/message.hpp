@@ -90,9 +90,9 @@ namespace quori
     struct QUORI_MESSAGE Initialized
     {
       uint8_t marker;
-      char _0[16];
-      char _1[16];
-      char _2[16];
+      char _0[20];
+      char _1[20];
+      char _2[20];
       uint8_t modes[3];
 
     private:

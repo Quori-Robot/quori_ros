@@ -28,7 +28,7 @@
     </visual>
   </link>
 
-  <joint name="waist_hinge" type="revolute">
+  <joint name="waist_pitch" type="revolute">
     <origin xyz="0 0 0.34798" rpy="0 0 0"/>
     <parent link="quori/base_link"/>
     <child link="quori/upper_torso"/>
@@ -44,7 +44,7 @@
     </inertial>
   </link>
 
-  <joint name="right_arm_r1" type="revolute">
+  <joint name="r_shoulder_pitch" type="revolute">
     <origin xyz="0.015 -0.16403066 0.43021758" rpy="0 0 0"/>
     <parent link="quori/upper_torso"/>
     <child link="quori/right_arm_base"/>
@@ -66,7 +66,7 @@
     </visual>
   </link>
 
-  <joint name="right_arm_r2" type="revolute">
+  <joint name="r_shoulder_roll" type="revolute">
     <origin xyz="0 0 0" rpy="0 -1.57 0"/>
     <parent link="quori/right_arm_base"/>
     <child link="quori/right_arm_upper"/>
@@ -125,7 +125,7 @@
     </inertial>
   </link>
 
-  <joint name="left_arm_r1" type="revolute">
+  <joint name="l_shoulder_pitch" type="revolute">
     <origin xyz="0.015 0.16403066 0.43021758" rpy="0 0 0"/>
     <parent link="quori/upper_torso"/>
     <child link="quori/left_arm_base"/>
@@ -148,7 +148,7 @@
   </link>
 
 
-  <joint name="left_arm_r2" type="revolute">
+  <joint name="l_shoulder_roll" type="revolute">
     <origin xyz="0 0 0" rpy="0 -1.57 0"/>
     <parent link="quori/left_arm_base"/>
     <child link="quori/left_arm_upper"/>
@@ -218,10 +218,9 @@
         <mesh filename="package://quori_description/meshes/0917_Helmet_Duripod.dae" />
       </geometry>
     </visual>
-    
   </link>
 
-  <joint name="head_joint" type="fixed">
+  <joint name="neck" type="fixed">
     <origin xyz="0 0 0.554" rpy="0 0 0" />
     <parent link="quori/upper_torso" />
     <child link="quori/head" />
@@ -251,7 +250,7 @@
     </visual>
   </link>
 
-  <joint name="head_Camera_joint" type="fixed">
+  <joint name="camera_pitch" type="fixed">
     <origin xyz="0.055 0 0.21" rpy="0 0 0" />
     <parent link="quori/head" />
     <child link="quori/head_camera" />
@@ -272,7 +271,7 @@
     </visual>
   </link>
 
-  <joint name="head_Mic_joint" type="fixed">
+  <joint name="mic_array" type="fixed">
     <origin xyz="-0.008 0 0.218" rpy="0 -.3 0" />
     <parent link="quori/head" />
     <child link="quori/head_mic" />

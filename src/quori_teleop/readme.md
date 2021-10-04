@@ -6,15 +6,15 @@
 
 ### Left Arm Control (Hold Left Trigger)
 
-- `left_arm_r1` - Left Thumb Stick (Y axis)
-- `left_arm_r2` - Left Thumb Stick (X axis)
+- `l_shoulder_pitch` - Left Thumb Stick (Y axis)
+- `l_shoulder_roll` - Left Thumb Stick (X axis)
 
 Hold `A` for "fast" mode, which doubles the movement speed.
 
 ### Right Arm Control (Hold Right Trigger)
 
-- `right_arm_r1` - Right Thumb Stick (Y axis)
-- `right_arm_r2` - Right Thumb Stick (X axis)
+- `r_shoulder_pitch` - Right Thumb Stick (Y axis)
+- `r_shoulder_roll` - Right Thumb Stick (X axis)
 
 Hold `A` for "fast" mode, which doubles the movement speed.
 
@@ -28,7 +28,7 @@ Move the holonomic ramsis base.
 
 ### Waise Hinge Control (Hold Right Bumper)
 
-- `waste_hinge` - Left Thumb Stick (Y axis)
+- `waste_pitch` - Left Thumb Stick (Y axis)
 
 ## Subscribed Topics
 

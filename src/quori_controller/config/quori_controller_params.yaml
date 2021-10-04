@@ -3,8 +3,8 @@ devices:
   - /dev/quori/left_arm
   - /dev/quori/waist
 home_cmds:
-  left_arm_r1: 0
-  left_arm_r2: -1.0
-  right_arm_r1: 0
-  right_arm_r2: -1.0
+  l_shoulder_pitch: 0
+  l_shoulder_roll: -1.0
+  r_shoulder_pitch: 0
+  r_shoulder_roll: -1.0
 generate_csvs: false

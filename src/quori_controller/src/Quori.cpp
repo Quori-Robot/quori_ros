@@ -99,7 +99,7 @@ Quori::Quori(ros::NodeHandle &nh, const std::vector<SerialDevice::Ptr> &devices)
 
 
   {
-    base_turret_ = std::make_shared<Joint>("base_turret");
+    base_turret_ = std::make_shared<Joint>("turret");
     hardware_interface::JointStateHandle state_handle(base_turret_->name, &base_turret_->position, &base_turret_->velocity, &base_turret_->effort);
     state_interface_.registerHandle(state_handle);
     hardware_interface::JointHandle handle(state_handle, &base_turret_->command);
@@ -107,7 +107,7 @@ Quori::Quori(ros::NodeHandle &nh, const std::vector<SerialDevice::Ptr> &devices)
   }
 
   {
-    base_left_ = std::make_shared<Joint>("base_left");
+    base_left_ = std::make_shared<Joint>("l_wheel");
     hardware_interface::JointStateHandle state_handle(base_left_->name, &base_left_->position, &base_left_->velocity, &base_left_->effort);
     state_interface_.registerHandle(state_handle);
     hardware_interface::JointHandle handle(state_handle, &base_left_->command);
@@ -115,7 +115,7 @@ Quori::Quori(ros::NodeHandle &nh, const std::vector<SerialDevice::Ptr> &devices)
   }
   
   {
-    base_right_ = std::make_shared<Joint>("base_right");
+    base_right_ = std::make_shared<Joint>("r_wheel");
     hardware_interface::JointStateHandle state_handle(base_right_->name, &base_right_->position, &base_right_->velocity, &base_right_->effort);
     state_interface_.registerHandle(state_handle);
     hardware_interface::JointHandle handle(state_handle, &base_right_->command);
@@ -196,7 +196,6 @@ void Quori::read(const ros::Time &time, const ros::Duration &period)
   last_read_ = time;
 
   const auto end = std::chrono::system_clock::now();
-  // std::cout << "Read took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
 }
 
 void Quori::write(const ros::Time &time, const ros::Duration &period)
@@ -242,7 +241,6 @@ void Quori::write(const ros::Time &time, const ros::Duration &period)
   }
   
   const auto end = std::chrono::system_clock::now();
-  // std::cout << "Write took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
 }
 
 void Quori::on_base_vel_status_(const geometry_msgs::Vector3::ConstPtr &msg)
@@ -256,5 +254,4 @@ void Quori::on_base_turret_pos_(const std_msgs::Float32::ConstPtr &msg)
   
   // The received position is in negative revolutions, convert to radians
   base_turret_->position = -msg->data * TAU;
-  //base_turret_->position += TAU / 8.0;
 }

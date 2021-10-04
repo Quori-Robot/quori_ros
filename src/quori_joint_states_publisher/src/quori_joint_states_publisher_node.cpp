@@ -32,12 +32,12 @@ namespace std
 }
 
 const std::unordered_map<Joint, std::string> JOINT_NAMES {
-  { Joint::WaistHinge, "waist_hinge" },
-  { Joint::TurretJoint, "base_turret" },
-  { Joint::LeftArm1, "left_arm_r1" },
-  { Joint::LeftArm2, "left_arm_r2" },
-  { Joint::RightArm1, "right_arm_r1" },
-  { Joint::RightArm2, "right_arm_r2" },
+  { Joint::WaistHinge, "waist_pitch" },
+  { Joint::TurretJoint, "turret" },
+  { Joint::LeftArm1, "l_shoulder_pitch" },
+  { Joint::LeftArm2, "l_shoulder_roll" },
+  { Joint::RightArm1, "r_shoulder_pitch" },
+  { Joint::RightArm2, "r_shoulder_roll" },
   { Joint::LeftArmLower, "left_arm_lower_r1" },
   { Joint::RightArmLower, "right_arm_lower_r1" },
 };

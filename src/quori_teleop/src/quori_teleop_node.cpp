@@ -39,14 +39,14 @@ namespace std
 }
 
 const static std::unordered_map<Joint, std::string> JOINT_NAMES {
-  { Joint::BaseLeft, "base_left" },
-  { Joint::BaseRight, "base_right" },
-  { Joint::BaseTurret, "base_turret" },
-  { Joint::LeftArm1, "left_arm_r1" },
-  { Joint::LeftArm2, "left_arm_r2" },
-  { Joint::RightArm1, "right_arm_r1" },
-  { Joint::RightArm2, "right_arm_r2" },
-  { Joint::WaistHinge, "waist_hinge" }
+  { Joint::BaseLeft, "l_wheel" },
+  { Joint::BaseRight, "r_wheel" },
+  { Joint::BaseTurret, "turret" },
+  { Joint::LeftArm1, "l_shoulder_pitch" },
+  { Joint::LeftArm2, "l_shoulder_roll" },
+  { Joint::RightArm1, "r_shoulder_pitch" },
+  { Joint::RightArm2, "r_shoulder_roll" },
+  { Joint::WaistHinge, "waist_pitch" }
 };
 
 struct JointCommand
@@ -170,11 +170,10 @@ void on_joy(const sensor_msgs::Joy::ConstPtr &msg)
   }
 
   trajectory_msgs::JointTrajectoryPoint point;
-  // std::cout << "cmd " << (lookup_latest_position("right_arm_r1") + (right_arm_r1 ? *right_arm_r1 : 0.0)) << std::endl;
-  point.positions.push_back(lookup_latest_position("right_arm_r1") + (right_arm_r1 ? *right_arm_r1 : 0.0));
-  point.positions.push_back(lookup_latest_position("right_arm_r2") + boost::get_optional_value_or(right_arm_r2, 0.0));
-  point.positions.push_back(lookup_latest_position("left_arm_r1") + boost::get_optional_value_or(left_arm_r1, 0.0));
-  point.positions.push_back(lookup_latest_position("left_arm_r2") + boost::get_optional_value_or(left_arm_r2, 0.0));
+  point.positions.push_back(lookup_latest_position("r_shoulder_pitch") + (right_arm_r1 ? *right_arm_r1 : 0.0));
+  point.positions.push_back(lookup_latest_position("r_shoulder_roll") + boost::get_optional_value_or(right_arm_r2, 0.0));
+  point.positions.push_back(lookup_latest_position("l_shoulder_pitch") + boost::get_optional_value_or(left_arm_r1, 0.0));
+  point.positions.push_back(lookup_latest_position("l_shoulder_roll") + boost::get_optional_value_or(left_arm_r2, 0.0));
   point.positions.push_back(waist_hinge ? *waist_hinge : 0.0);
   point.time_from_start = ros::Duration(2);
   traj.points.push_back(point);
@@ -186,11 +185,11 @@ int main(int argc, char *argv[])
 
   ros::NodeHandle nh;
 
-  traj.joint_names.push_back("right_arm_r1");
-  traj.joint_names.push_back("right_arm_r2");
-  traj.joint_names.push_back("left_arm_r1");
-  traj.joint_names.push_back("left_arm_r2");
-  traj.joint_names.push_back("waist_hinge");
+  traj.joint_names.push_back("r_shoulder_pitch");
+  traj.joint_names.push_back("r_shoulder_roll");
+  traj.joint_names.push_back("l_shoulder_pitch");
+  traj.joint_names.push_back("l_shoulder_roll");
+  traj.joint_names.push_back("waist_pitch");
 
   const auto joy = nh.subscribe<sensor_msgs::Joy>("/joy", 1, &on_joy);
   const auto joint_states_sub = nh.subscribe<sensor_msgs::JointState>("/joint_states", 1, &on_joint_states);

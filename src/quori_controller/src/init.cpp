@@ -232,11 +232,11 @@ int main(int argc, char *argv[])
     Microcontroller microcontroller = Microcontroller::Unknown;
     const std::string &joint = info.joints[0].name;
     std::cout << joint << std::endl;
-    if (joint.find("left_arm") != std::string::npos)
+    if (joint.find("l_shoulder") != std::string::npos)
     {
       microcontroller = Microcontroller::LeftArm;
     }
-    else if (joint.find("right_arm") != std::string::npos)
+    else if (joint.find("r_shoulder") != std::string::npos)
     {
       microcontroller = Microcontroller::RightArm;
     }
@@ -342,15 +342,12 @@ int main(int argc, char *argv[])
       break;
     }
   }
-
   
-
   if (should_reboot)
   {
     std::cout << "Rebooting..." << std::endl;
     run("/sbin/reboot", {});
   }
   
-
   return EXIT_SUCCESS;
 }

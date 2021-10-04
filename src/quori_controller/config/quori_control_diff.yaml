@@ -6,16 +6,16 @@ quori:
   joint_trajectory_controller:
     type: position_controllers/JointTrajectoryController
     joints:
-      - right_arm_r1
-      - right_arm_r2
-      - left_arm_r1
-      - left_arm_r2
-      - waist_hinge
+      - r_shoulder_pitch
+      - r_shoulder_roll
+      - l_shoulder_pitch
+      - l_shoulder_roll
+      - waist_pitch
 
   base_controller:
     type: diff_drive_controller/DiffDriveController
-    left_wheel: 'base_left'
-    right_wheel: 'base_right'
+    left_wheel: 'l_wheel'
+    right_wheel: 'r_wheel'
     enable_odom_tf: true
     publish_rate: 50
     pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]

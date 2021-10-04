@@ -39,9 +39,9 @@ bool QuoriHolonomicDriveController::init(hardware_interface::VelocityJointInterf
 
   setOdomPubFields(root_nh, controller_nh);
 
-  left_joint_ = hw->getHandle("base_left");
-  right_joint_ = hw->getHandle("base_right");
-  turret_joint_ = hw->getHandle("base_turret");
+  left_joint_ = hw->getHandle("l_wheel");
+  right_joint_ = hw->getHandle("r_wheel");
+  turret_joint_ = hw->getHandle("turret");
   x_joint_ = hw->getHandle("base_x");
   y_joint_ = hw->getHandle("base_y");
   angle_joint_ = hw->getHandle("base_angle");
