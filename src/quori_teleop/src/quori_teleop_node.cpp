@@ -159,7 +159,7 @@ void on_joy(const sensor_msgs::Joy::ConstPtr &msg)
 
     vel.linear.x = state.left_stick[1] / 8 * (state.a_button ? 2 : 1);
     vel.linear.y = -state.left_stick[0] / 8 * (state.a_button ? 2 : 1);
-    vel.angular.z = -state.right_stick[0] / 2 * (state.a_button ? 2 : 1);
+    vel.angular.z = state.right_stick[0] / 2 * (state.a_button ? 2 : 1);
   }
   // Hinge Control
   else if (state.right_trigger_1)
