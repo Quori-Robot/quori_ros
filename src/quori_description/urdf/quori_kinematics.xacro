@@ -14,7 +14,7 @@
     </visual>
   </link>
 
-  <link name="quori/upper_torso">
+  <link name="quori/body_upper">
     <inertial>
       <origin xyz="0 0 -0.01" rpy="0 0 0"/>
       <mass value="26.75"/>
@@ -31,12 +31,12 @@
   <joint name="waist_pitch" type="revolute">
     <origin xyz="0 0 0.34798" rpy="0 0 0"/>
     <parent link="quori/base_link"/>
-    <child link="quori/upper_torso"/>
-    <axis xyz="0 1 0" />
-    <limit lower="-0.21" upper="0.47" effort="1" velocity="1"/>
+    <child link="quori/body_upper"/>
+    <axis xyz="0 -1 0" />
+    <limit lower="-0.47123889803846897" upper="0.2111848394913139" effort="1" velocity="1"/>
   </joint>
 
-  <link name="quori/right_arm_base">
+  <link name="quori/r_shoulder">
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <mass value="0.0"/>
@@ -46,13 +46,13 @@
 
   <joint name="r_shoulder_pitch" type="revolute">
     <origin xyz="0.015 -0.16403066 0.43021758" rpy="0 0 0"/>
-    <parent link="quori/upper_torso"/>
-    <child link="quori/right_arm_base"/>
+    <parent link="quori/body_upper"/>
+    <child link="quori/r_shoulder"/>
     <axis xyz="0 -1 0" />
     <limit lower="-2.4" upper="2.4" effort="1" velocity="1"/>
   </joint>
 
-  <link name="quori/right_arm_upper">
+  <link name="quori/r_arm_upper">
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <mass value="0.00"/>
@@ -67,14 +67,14 @@
   </link>
 
   <joint name="r_shoulder_roll" type="revolute">
-    <origin xyz="0 0 0" rpy="0 -1.57 0"/>
-    <parent link="quori/right_arm_base"/>
-    <child link="quori/right_arm_upper"/>
-    <axis xyz="0 0 1" />
-    <limit lower="-1.1" upper="1.1" effort="1" velocity="1"/>
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="quori/r_shoulder" />
+    <child link="quori/r_arm_upper" />
+    <axis xyz="-1 0 0" />
+    <limit lower="-1.1" upper="1.1" effort="1" velocity="1" />
   </joint>
 
-  <link name="quori/right_arm_upper2lower">
+  <link name="quori/r_arm_upper2lower">
     <inertial>
       <origin xyz="0 0 0.3" rpy="0 0 0"/>
       <mass value="0.19"/>
@@ -89,12 +89,12 @@
     </visual>
   </link>
 
-  <joint name="right_arm_upper2lower_j" type="fixed">
-    <parent link="quori/right_arm_upper"/>
-    <child link="quori/right_arm_upper2lower"/>
+  <joint name="r_arm_upper2lower_j" type="fixed">
+    <parent link="quori/r_arm_upper"/>
+    <child link="quori/r_arm_upper2lower"/>
   </joint>
 
-  <link name="quori/right_arm_lower">
+  <link name="quori/r_arm_lower">
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <mass value="0.00"/>
@@ -103,21 +103,18 @@
     <visual>
       <origin rpy="1.57 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://quori_description/meshes/0917_Lower_Arm_left.dae" />
+        <mesh filename="package://quori_description/meshes/0917_Lower_Arm_right.dae" />
       </geometry>
     </visual> 
   </link>
 
-  <joint name="right_arm_lower_r1" type="revolute">
-    <origin xyz="0 -0.15 0" rpy="0 1.57 0"/>
-    <parent link="quori/right_arm_upper"/>
-    <child link="quori/right_arm_lower"/>
-    <axis xyz="0 1 0" />
-    <limit lower="-3.14" upper="3.14" effort="1" velocity="1"/>
+  <joint name="r_elbow_pitch" type="fixed">
+    <origin xyz="0 -0.15 0" rpy="0 0 0" />
+    <parent link="quori/r_arm_upper" />
+    <child link="quori/r_arm_lower" />
   </joint>
 
-
-  <link name="quori/left_arm_base">
+  <link name="quori/l_shoulder">
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <mass value="0.0"/>
@@ -126,21 +123,21 @@
   </link>
 
   <joint name="l_shoulder_pitch" type="revolute">
-    <origin xyz="0.015 0.16403066 0.43021758" rpy="0 0 0"/>
-    <parent link="quori/upper_torso"/>
-    <child link="quori/left_arm_base"/>
-    <axis xyz="0 1 0" />
-    <limit lower="-2.4" upper="2.4" effort="1" velocity="1"/>
+    <origin xyz="0.015 0.16403066 0.43021758" rpy="0 0 0" />
+    <parent link="quori/upper_torso" />
+    <child link="quori/l_shoulder" />
+    <axis xyz="0 -1 0" />
+    <limit lower="-2.4" upper="2.4" effort="1" velocity="1" />
   </joint>
 
-  <link name="quori/left_arm_upper">
+  <link name="quori/l_arm_upper">
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="0.00"/>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.00" />
       <inertia ixx="0.0"  ixy="0"  ixz="0" iyy="0.0" iyz="0" izz="0.0" />
     </inertial>
     <visual>
-      <origin rpy="-1.57079632679 0 -3.14" xyz="0.165 0.9765 -0.137"/>
+      <origin rpy="-1.57079632679 0 -3.14" xyz="0.165 0.9765 -0.137" />
       <geometry>
         <mesh filename="package://quori_description/meshes/0917_Upper_Arm+gear_left.dae"/>
       </geometry>
@@ -149,14 +146,14 @@
 
 
   <joint name="l_shoulder_roll" type="revolute">
-    <origin xyz="0 0 0" rpy="0 -1.57 0"/>
-    <parent link="quori/left_arm_base"/>
-    <child link="quori/left_arm_upper"/>
-    <axis xyz="0 0 -1" />
-    <limit lower="-1.1" upper="1.1" effort="1" velocity="1"/>
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="quori/l_shoulder" />
+    <child link="quori/l_arm_upper" />
+    <axis xyz="1 0 0" />
+    <limit lower="-1.1" upper="1.1" effort="1" velocity="1" />
   </joint>
 
-  <link name="quori/left_arm_upper2lower">
+  <link name="quori/l_arm_upper2lower">
     <inertial>
       <origin xyz="0 0 0.3" rpy="0 0 0"/>
       <mass value="0.19"/>
@@ -171,12 +168,12 @@
     </visual>
   </link>
 
-  <joint name="left_arm_upper2lower_j" type="fixed">
-    <parent link="quori/left_arm_upper"/>
-    <child link="quori/left_arm_upper2lower"/>
+  <joint name="l_arm_upper2lower_j" type="fixed">
+    <parent link="quori/l_arm_upper"/>
+    <child link="quori/l_arm_upper2lower"/>
   </joint>
 
-  <link name="quori/left_arm_lower">
+  <link name="quori/l_arm_lower">
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <mass value="0.00"/>
@@ -191,12 +188,10 @@
     </visual>
   </link>
 
-  <joint name="left_arm_lower_r1" type="revolute">
-    <origin xyz="0 0.15 0" rpy="0 1.57 0"/>
-    <parent link="quori/left_arm_upper"/>
-    <child link="quori/left_arm_lower"/>
-    <axis xyz="0 1 0" />
-    <limit lower="-3.142" upper="3.142" effort="1" velocity="1"/>
+  <joint name="l_elbow_pitch" type="fixed">
+    <origin xyz="0 0.15 0" rpy="0 0 0"/>
+    <parent link="quori/l_arm_upper"/>
+    <child link="quori/l_arm_lower"/>
   </joint>
 
   <link name="quori/head">
@@ -222,7 +217,7 @@
 
   <joint name="neck" type="fixed">
     <origin xyz="0 0 0.554" rpy="0 0 0" />
-    <parent link="quori/upper_torso" />
+    <parent link="quori/body_upper" />
     <child link="quori/head" />
   </joint>
 

@@ -230,7 +230,6 @@ void QuoriHolonomicDriveController::setOdomPubFields(ros::NodeHandle &root_nh, r
 void QuoriHolonomicDriveController::cmdVelCallback(const geometry_msgs::Twist &command)
 {
 
-  std::cout << "CMD VEL" << std::endl;
   if (!isRunning())
   {
     ROS_ERROR_NAMED(name_, "Can't accept new commands. Controller is not running.");
@@ -252,15 +251,10 @@ void QuoriHolonomicDriveController::cmdVelCallback(const geometry_msgs::Twist &c
     return;
   }
 
-
-  
-
   command_struct_.ang   = command.angular.z;
   command_struct_.lin_x = command.linear.x;
   command_struct_.lin_y = command.linear.y;
   command_struct_.stamp = ros::Time::now();
-
-  // std::cout << "asdasd " << command_struct_.lin_x << std::endl;
 
   command_.writeFromNonRT (command_struct_);
   ROS_DEBUG_STREAM_NAMED(name_, "Added values to command. "
