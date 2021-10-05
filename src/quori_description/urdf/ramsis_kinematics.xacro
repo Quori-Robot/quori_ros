@@ -100,7 +100,7 @@
 
   <joint name="turret" type="continuous">
     <origin xyz="0 0 0.2027174" rpy="0 0 0"/>
-    <parent link="ramsis/base_link"/>
+    <parent link="ramsis/base_link_diff"/>
     <child link="ramsis/turret_link"/>
     <axis xyz="0 0 1" />
     <limit effort="1" velocity="3"/>
