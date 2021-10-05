@@ -1,28 +1,28 @@
+transform:
+  R: 4
+  r_m: 1.5
+  r_o: 2
+  h: 1
+  L: 8.447625281745774
+  epsilon: 0.05906855906704951
+  delta:
+    x: -2.5
+    y: -1.65
+  screen_size:
+    x: 1920
+    y: 1080
 lookup_table_resolution:
   x: 2048
   y: 2048
-min:
-  psi: -1.57
-  theta: -0.8816185923631892
-transform:
-  R: 4
-  screen_size:
-    y: 1080
-    x: 1920
-  h: 1
-  delta:
-    x: -2.56
-    y: -1.72
-  epsilon: 0.05906855906704951
-  r_m: 1.5
-  L: 8.447625281745774
-  r_o: 2
 image_resolution:
-  y: 720
   x: 1280
-center:
-  psi: 1.575747859968651
-  theta: 1.471455315819969
+  y: 720
 max:
-  psi: 1.57
   theta: 0.8799999999999999
+  psi: 1.57
+min:
+  theta: -0.8816185923631892
+  psi: -1.57
+center:
+  theta: 1.471455315819969
+  psi: 1.575747859968651
