@@ -48,7 +48,7 @@
   <link name="ramsis/turret_link">
   </link>
 
-  <link name="ramsis/left_wheel_link">
+  <link name="ramsis/l_wheel_link">
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <mass value="0.0"/>
@@ -56,7 +56,7 @@
     </inertial>
   </link>
 
-  <link name="ramsis/right_wheel_link">
+  <link name="ramsis/r_wheel_link">
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <mass value="0.0"/>
@@ -76,16 +76,16 @@
   <joint name="l_wheel" type="continuous">
     <origin xyz="0 0.12284075 0" rpy="0 0 0"/>
     <parent link="ramsis/wheel_axle"/>
-    <child link="ramsis/left_wheel_link"/>
-    <axis xyz="0 0 1" />
+    <child link="ramsis/l_wheel_link"/>
+    <axis xyz="0 1 0" />
     <limit effort="1" velocity="0.5"/>
   </joint>
 
   <joint name="r_wheel" type="continuous">
     <origin xyz="0 -0.12284075 0" rpy="0 0 0"/>
     <parent link="ramsis/wheel_axle"/>
-    <child link="ramsis/right_wheel_link"/>
-    <axis xyz="0 0 1" />
+    <child link="ramsis/r_wheel_link"/>
+    <axis xyz="0 1 0" />
     <limit effort="1" velocity="0.5"/>
   </joint>
 
