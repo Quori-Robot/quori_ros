@@ -101,7 +101,7 @@
       <inertia ixx="0.0"  ixy="0"  ixz="0" iyy="0.0" iyz="0" izz="0.0" />
     </inertial>
     <visual>
-      <origin rpy="1.57 0 0" xyz="0 0 0"/>
+      <origin rpy="1.570759635 1.570759635 0" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://quori_description/meshes/0917_Lower_Arm_right.dae" />
       </geometry>
@@ -181,7 +181,7 @@
     </inertial>
     
     <visual>
-      <origin rpy="-1.57 3.14 0" xyz="0 0 0" />
+      <origin rpy="-1.570759635 -1.570759635 0" xyz="0 0 0" />
       <geometry>
         <mesh filename="package://quori_description/meshes/0917_Lower_Arm_left.dae" />
       </geometry>
@@ -222,7 +222,7 @@
   </joint>
 
   <joint name="head_camera_optical_joint" type="fixed">
-    <origin xyz="0 0 0" rpy="-1.57079 0 -1.57079" />
+    <origin xyz="0 0 0" rpy="-1.57079632679 0 -1.57079632679" />
     <parent link="quori/head_camera" />
     <child link="quori/head_camera_optical" />
   </joint>
