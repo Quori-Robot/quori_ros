@@ -1,5 +1,5 @@
 <launch>
-  <node pkg="tf" type="static_transform_publisher" name="laser_broadcaster" args="0.27 0 0.05 0 0 -0.707 0.707 ramsis/base_link laser 50" />
+  <node pkg="tf" type="static_transform_publisher" name="laser_broadcaster" args="0.27 0 0.05 0 0 -0.707 0.707 ramsis/base_link_diff laser 50" />
   <remap from="tf" to="tf_static"/>
 </launch>
 
