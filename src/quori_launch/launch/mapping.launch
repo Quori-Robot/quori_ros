@@ -16,6 +16,5 @@
     <param name="stt" type="double" value="0.2" />
   </node>
 
-  <include file="$(find quori_launch)/launch/tf_base_laser.launch"/>
   <include file="$(find quori_launch)/launch/filtered_laser.launch"/>
 </launch>

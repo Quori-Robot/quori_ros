@@ -40,7 +40,7 @@
   </link>
 
   <joint name="laser_scanner_joint" type="fixed">
-    <origin xyz="0.178 0 0.1" rpy="0 0 0" />
+    <origin xyz="0.152 0 0.156" rpy="0 0.0 -1.5707" />
     <parent link="ramsis/base_link_diff" />
     <child link="ramsis/base_laser_scanner" />
   </joint>
