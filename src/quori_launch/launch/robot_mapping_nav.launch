@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <launch>
   <include file="$(find quori_nav)/launch/move_base.launch"/>
-  <include file="$(find quori_face)/launch/quori_face.launch" />
   <include file="$(find quori_launch)/launch/robot.launch" />
 </launch>
