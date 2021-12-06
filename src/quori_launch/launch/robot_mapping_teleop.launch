@@ -3,7 +3,5 @@
   <node name="joystick" pkg="joy" type="joy_node" required="true" />
   <node name="teleop" pkg="quori_teleop" type="node" required="true" />
   <include file="$(find quori_launch)/launch/mapping.launch" />
-  <include file="$(find quori_controller)/launch/quori_control_holo.launch" />
-  <include file="$(find astra_ros)/launch/default.launch" />
-  <include file="$(find quori_face)/launch/quori_face.launch" />
+  <include file="$(find quori_launch)/launch/robot.launch" />
 </launch>
