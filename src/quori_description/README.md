@@ -34,3 +34,8 @@ This URDF file allows one to use the RAMSIS holonomic base without Quori attache
 
   - `ramsis/base_link` - The root of the RAMSIS kinematic tree (**Note: This is the root when using both Quori and the RAMSIS base**).
   - `ramsis/base_laser_scanner` - The frame for the RAMSIS-mounted 2D LIDAR.
+
+## Quori + RAMSIS URDF (`urdf/quori.xacro`)
+
+This URDF contains all joints and links from both `quori_standalone.xacro` and `ramsis_standalone.xacro`. This URDF file should be used in the default configuration where Quori is mounted on top of the RAMSIS base.
+
