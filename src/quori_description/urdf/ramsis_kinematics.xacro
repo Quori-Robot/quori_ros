@@ -46,24 +46,34 @@
   </joint>
 
   <link name="ramsis/turret_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.01"/>
+      <inertia ixx="0.01"  ixy="0"  ixz="0" iyy="0.0" iyz="0" izz="0.0" />
+    </inertial>
   </link>
 
   <link name="ramsis/base_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.01"/>
+      <inertia ixx="0.01"  ixy="0"  ixz="0" iyy="0.0" iyz="0" izz="0.0" />
+    </inertial>
   </link>
 
   <link name="ramsis/l_wheel_link">
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="0.0"/>
-      <inertia ixx="0.0"  ixy="0"  ixz="0" iyy="0.0" iyz="0" izz="0.0" />
+      <mass value="0.1"/>
+      <inertia ixx="0.1"  ixy="0"  ixz="0" iyy="0.0" iyz="0" izz="0.0" />
     </inertial>
   </link>
 
   <link name="ramsis/r_wheel_link">
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="0.0"/>
-      <inertia ixx="0.0"  ixy="0"  ixz="0" iyy="0.0" iyz="0" izz="0.0" />
+      <mass value="0.1"/>
+      <inertia ixx="0.1"  ixy="0"  ixz="0" iyy="0.0" iyz="0" izz="0.0" />
     </inertial>
   </link>
 
@@ -80,6 +90,11 @@
   </joint>
 
   <link name="ramsis/wheel_axle">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.00"/>
+      <inertia ixx="0.00"  ixy="0"  ixz="0" iyy="0.0" iyz="0" izz="0.0" />
+    </inertial>
   </link>
 
   <joint name="l_wheel" type="continuous">

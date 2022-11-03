@@ -19,6 +19,11 @@ sudo apt-get install ros-${ROS_DISTRO}-sound-play ros-${ROS_DISTRO}-rgbd-launch 
 git clone https://github.com/Quori-ROS/quori_ros.git
 cd quori_ros
 git submodule init
+sudo apt-get install ros-noetic-sound-play ros-noetic-rgbd-launch ros-noetic-libuvc-camera ros-noetic-libuvc-ros
+catkin config --init
+catkin config --skiplist ros_astra_camera astra_ros quori_face
+catkin_build
+
 catkin_make
 . ./devel/setup.sh
 ```
