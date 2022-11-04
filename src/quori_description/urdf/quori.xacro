@@ -28,8 +28,8 @@
 
   <link name="base_link"/>
   <joint name="fixed" type="fixed">
-    <parent link="ramsis/base_link"/>
-    <child link="base_link"/>
+    <parent link="base_link"/>
+    <child link="ramsis/wheel_axle"/>
   </joint>
 
   <xacro:macro name="joint_transmission" params="prefix">
@@ -96,9 +96,9 @@
 
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-      <robotNamespace>/quori</robotNamespace>
+      <!-- <robotNamespace>/quori</robotNamespace> -->
       <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
-      <legacyModeNS>true</legacyModeNS>
     </plugin>
   </gazebo>
+
 </robot>
