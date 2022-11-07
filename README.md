@@ -24,6 +24,7 @@ cd quori_ros
 git submodule init
 sudo apt-get install ros-noetic-sound-play ros-noetic-rgbd-launch ros-noetic-libuvc-camera ros-noetic-libuvc-ros
 sudo apt-get install ros-noetic-ros-control ros-noetic-ros-controllers ros-noetic-gazebo-ros-control
+rosdep install --from-paths src --ignore-src -r -y
 catkin config --init
 catkin_build
 source devel/setup.sh
@@ -45,6 +46,7 @@ cd quori_ros
 git submodule init
 sudo apt-get install ros-noetic-sound-play ros-noetic-rgbd-launch ros-noetic-libuvc-camera ros-noetic-libuvc-ros
 sudo apt-get install ros-noetic-ros-control ros-noetic-ros-controllers ros-noetic-gazebo-ros-control
+rosdep install --from-paths src --ignore-src -r -y
 catkin config --init
 catkin config --skiplist ros_astra_camera astra_ros quori_face
 catkin_build
@@ -67,12 +69,25 @@ Terminal 2: `rosrun rqt_joint_trajectory_controller rqt_joint_trajectory_control
 
 Alternate Terminal 2 (to be used with controller, keybindings at https://github.com/Quori-ROS/quori_ros/tree/master/src/quori_teleop): `roslaunch quori_teleop quori_teleop.launch`
 
-
 ### For Simulation
 
-Terminal 1: `roslaunch quori_controller quori_control_gazebo.launch`
+Terminal 1: `roslaunch quori_gazebo quori_world.launch`
 
 Terminal 2: `rosrun rqt_joint_trajectory_controller rqt_joint_trajectory_controller`
+
+## Run the Face
+
+This will launch the simulation with the face image embedded in the Rviz interface
+
+Terminal 1: `roslaunch quori_gazebo quori_world.launch`
+
+Terminal 2:
+```
+cd ~/Documents/GitHub/quori_ros/src/quori_face_generator/gui
+python3 -m http.server 8000
+```
+
+Open a browser at `http://localhost:8000/FaceMotion mand3l.html`
 
 
 

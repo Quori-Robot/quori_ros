@@ -22,4 +22,6 @@
 
   <include file="$(find quori_controller)/launch/quori_control_gazebo.launch" />
 
+  <include file="$(find quori_face_generator)/launch/websocket.launch" />
+
 </launch>
