@@ -1,0 +1,24 @@
+#face {
+  height: 400px;
+  width: 100%;
+}
+#face-wrapper {
+  text-align: center;
+}
+#tabs,
+.tab-content {
+  font-size: 10pt;
+}
+.tab-content {
+  overflow: visible;
+}
+.tab-content s input {
+  display: none;
+}
+.tab-content .control {
+  padding: 5px 20px;
+  margin: 0px -20px;
+}
+.tab-content .jslider {
+  margin-top: 6px;
+}

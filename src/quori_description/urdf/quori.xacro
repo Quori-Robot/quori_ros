@@ -7,9 +7,98 @@
   <quori_kinematics />
   <ramsis_kinematics />
 
+  <material name="blue">
+    <color rgba="0 0 0.8 1"/>
+  </material>
+  <material name="black">
+    <color rgba="0 0 0 1"/>
+  </material>
+  <material name="white">
+    <color rgba="1 1 1 1"/>
+  </material>
+  <material name="gray">
+    <color rgba="0.5 0.5 0.5 1"/>
+  </material>
+
   <!-- Join the quori robot to the ramsis robot's turret joint -->
   <joint name="ramsis_quori_connector" type="fixed">
     <parent link="ramsis/turret_link" />
     <child link="quori/base_link"/>
   </joint>
+
+  <link name="base_link"/>
+  <joint name="fixed" type="fixed">
+    <parent link="base_link"/>
+    <child link="ramsis/wheel_axle"/>
+  </joint>
+
+  <xacro:macro name="joint_transmission" params="prefix">
+    <transmission name="${prefix}_tran">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="${prefix}_motor">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="${prefix}">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+  </xacro:macro>
+
+  <xacro:macro name="wheel_transmission" params="prefix">
+    <transmission name="${prefix}_tran">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="${prefix}_motor">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="${prefix}">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+  </xacro:macro>
+
+  <xacro:joint_transmission prefix="waist_pitch"/>
+  <xacro:joint_transmission prefix="r_shoulder_pitch"/>
+  <xacro:joint_transmission prefix="r_shoulder_roll"/>
+  <xacro:joint_transmission prefix="l_shoulder_pitch"/>
+  <xacro:joint_transmission prefix="l_shoulder_roll"/>
+  <xacro:wheel_transmission prefix="l_wheel"/>
+  <xacro:wheel_transmission prefix="r_wheel"/>
+  <xacro:joint_transmission prefix="turret"/>
+  
+
+  <gazebo reference="quori/body_upper">
+    <material>Gazebo/White</material>
+  </gazebo>
+  <gazebo reference="quori/base_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+  <gazebo reference="quori/head">
+    <material>Gazebo/White</material>
+  </gazebo>
+  <gazebo reference="quori/r_arm_upper">
+    <material>Gazebo/White</material>
+  </gazebo>
+  <gazebo reference="quori/r_arm_lower">
+    <material>Gazebo/White</material>
+  </gazebo>
+  <gazebo reference="quori/l_arm_upper">
+    <material>Gazebo/White</material>
+  </gazebo>
+  <gazebo reference="quori/l_arm_lower">
+    <material>Gazebo/White</material>
+  </gazebo>
+  <gazebo reference="base_link_diff">
+    <material>Gazebo/White</material>
+  </gazebo>  
+
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <!-- <robotNamespace>/quori</robotNamespace> -->
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    </plugin>
+  </gazebo>
+
 </robot>

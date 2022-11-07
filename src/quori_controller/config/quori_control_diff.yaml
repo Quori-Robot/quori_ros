@@ -11,6 +11,7 @@ quori:
       - l_shoulder_pitch
       - l_shoulder_roll
       - waist_pitch
+      - turret
 
   base_controller:
     type: diff_drive_controller/DiffDriveController

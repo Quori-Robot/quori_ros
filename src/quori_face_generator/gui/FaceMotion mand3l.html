@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html class="mti-inactive" lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link href="FaceMotion%20mand3l_files/css.css" rel="stylesheet" type="text/css">
+    <meta charset="utf-8">
+    <title>
+        FaceMotion |
+        mand3l
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The software, design and robotics portfolio of Paul Mandel.">
+    <meta name="author" content="Paul Mandel">
+    <link rel="stylesheet" type="text/css" href="FaceMotion%20mand3l_files/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="FaceMotion%20mand3l_files/base.css">
+    <link rel="stylesheet" type="text/css" href="FaceMotion%20mand3l_files/base-noframe.css">
+    <link rel="stylesheet" type="text/css" href="FaceMotion%20mand3l_files/slider-demo.css">
+    <link rel="stylesheet" type="text/css" href="FaceMotion%20mand3l_files/jquery.slider.min.css">
+    <link rel="stylesheet" type="text/css" href="FaceMotion%20mand3l_files/style.css">
+    <link rel="shortcut icon" href="https://www.mand3l.com/static//base/img/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144"
+        href="https://www.mand3l.com/static/bootstrap/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114"
+        href="https://www.mand3l.com/static/bootstrap/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"
+        href="https://www.mand3l.com/static/bootstrap/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed"
+        href="https://www.mand3l.com/static/bootstrap/ico/apple-touch-icon-57-precomposed.png">
+    <script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+    <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.7.3/nipplejs.js"></script>
+    <script type="text/javascript">
+        var ros = new ROSLIB.Ros({
+            url: 'ws://localhost:9090'
+        });
+
+        ros.on('connection', function() { console.log('Connected to websocket server.');});
+
+        ros.on('error', function(error) { console.log('Error connecting to websocket server: ', error); window.alert('Error connecting to websocket server'); });
+
+        ros.on('close', function() { console.log('Connection to websocket server closed.');});
+
+        var imageTopic = new ROSLIB.Topic({
+            ros : ros,
+            name : '/face_image',
+            messageType : 'sensor_msgs/CompressedImage'
+        });
+
+        var listener = new ROSLIB.Topic({
+            ros : ros,
+            name : '/emotion',
+            messageType : 'std_msgs/Float64MultiArray'
+        });
+
+        listener.subscribe(function(message) {
+            console.log('Received message on ' + listener.name + ': ' + message.data);
+
+            //Joy
+            $('#joy').slider('value', Math.round(message.data[0]*100).toString());
+
+            //Sadness
+            $('#sadness').slider('value', Math.round(message.data[1]*100).toString());
+            
+            //Anger
+            $('#anger').slider('value', Math.round(message.data[2]*100).toString());
+
+            //Disgust
+            $('#disgust').slider('value', Math.round(message.data[3]*100).toString());
+
+            //Fear
+            $('i#fear').slider('value', Math.round(message.data[4]*100).toString());
+
+            //Surprise
+            $('#surprise').slider('value', Math.round(message.data[5]*100).toString());
+        });
+    </script>
+
+
+
+    <script type="text/javascript" async="" src="FaceMotion%20mand3l_files/sn.js"></script>
+    <script type="text/javascript" async="" src="FaceMotion%20mand3l_files/ga_002.js"></script>
+    <script type="text/javascript" async="" src="FaceMotion%20mand3l_files/sn.js"></script>
+    <script type="text/javascript" async="" src="FaceMotion%20mand3l_files/ga.js"></script>
+    <script src="FaceMotion%20mand3l_files/jquery.min.js"> </script>
+    <script src="FaceMotion%20mand3l_files/sugar-1.3.9.min.js"> </script>
+    <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.7.3/nipplejs.js"></script>
+</head>
+
+<body id="facemotion" class="">
+    <div id="side-menu">
+        <img class="headshot" src="FaceMotion%20mand3l_files/headshot.png" width="120px" height="120px">
+        <p class="bio">Hi! I'm Paul. I'm a designer and technologist who
+            specializes in leading cross-functional teams to deliver great products
+            with experiences that go beyond traditional screen-based UIs. I'm not
+            currently looking for new projects, but if you want to connect feel free
+            to drop me a line.</p>
+        <p><a href="https://paulmandel-resume.web.app/">» Resume</a></p>
+        <ul class="unstyled inline centered">
+            <li><a href="mailto:paul@mand3l.com"><img src="FaceMotion%20mand3l_files/gmail.png" width="50px"
+                        height="50px"></a></li>
+            <li><a href="http://www.github.com/paulmand3l/" target="_blank"><img
+                        src="FaceMotion%20mand3l_files/github.png" width="50px" height="50px"></a></li>
+            <li><a href="http://blog.mand3l.com/" target="_blank"><img src="FaceMotion%20mand3l_files/rss.png"
+                        width="50px" height="50px"></a></li>
+            <li><a href="http://www.linkedin.com/in/pmandel/" target="_blank"><img
+                        src="FaceMotion%20mand3l_files/linkedin.png" width="50px" height="50px"></a></li>
+            <li><a href="https://www.facebook.com/pmandel" target="_blank"><img
+                        src="FaceMotion%20mand3l_files/facebook.png" width="50px" height="50px"></a></li>
+        </ul>
+    </div>
+    <div id="wrapper">
+        <div class="navbar clearfix">
+            <div class="navbar-inner">
+                <p class="brand">FaceMotion</p>
+            </div>
+        </div>
+        <div id="main" class="container">
+            <div class="row">
+                <div class="span3">
+                    <ul id="tabs" class="nav nav-tabs">
+                        <li class="active">
+                            <a class="emotion-controls" href="#emotions">Emotions</a>
+                        </li>
+                        <li>
+                            <a class="muscle-controls" href="#musculature">Musculature</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="musculature" class="tab-pane">
+                            <div class="control">
+                                <p>Inner Occipitofrontalis</p>
+                                <input class="slider muscle" id="inner-occipitofrontalis" type="slider"
+                                    value="30.000000000000004" style="display: none;"><span
+                                    class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <p>Outer Occipitofrontalis</p>
+                                <input class="slider muscle" id="outer-occipitofrontalis" type="slider"
+                                    value="30.000000000000004" style="display: none;"><span
+                                    class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <p>Corrugator</p>
+                                <input class="slider muscle" id="corrugator" type="slider" value="0"
+                                    style="display: none;"><span class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <p>Procerus</p>
+                                <input class="slider muscle" id="procerus" type="slider" value="0"
+                                    style="display: none;"><span class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <p>Orbicularis Oculi</p>
+                                <input class="slider muscle" id="orbicularis-oculi" type="slider" value="80"
+                                    style="display: none;"><span class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <p>Levator Labii</p>
+                                <input class="slider muscle" id="levator-labii" type="slider" value="50"
+                                    style="display: none;"><span class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <p>Levator Palpabrae</p>
+                                <input class="slider muscle" id="levator-palpabrae" type="slider" value="0"
+                                    style="display: none;"><span class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <p>Zygomaticus</p>
+                                <input class="slider muscle" id="zygomaticus" type="slider" value="100"
+                                    style="display: none;"><span class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <p>Buccinator</p>
+                                <input class="slider muscle" id="buccinator" type="slider" value="0"
+                                    style="display: none;"><span class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <p>Orbicularis Oris</p>
+                                <input class="slider muscle" id="orbicularis-oris" type="slider" value="0"
+                                    style="display: none;"><span class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <p>Depressor Anguli Oris</p>
+                                <input class="slider muscle" id="depressor-anguli-oris" type="slider" value="0"
+                                    style="display: none;"><span class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <p>Mentalis</p>
+                                <input class="slider muscle" id="mentalis" type="slider" value="0"
+                                    style="display: none;"><span class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <p>Jaw</p>
+                                <input class="slider muscle" id="jaw" type="slider" value="0"
+                                    style="display: none;"><span class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                        </div>
+                        <div id="emotions" class="tab-pane active">
+                            <div class="control">
+                                <p>Joy</p>
+                                <input class="slider emotion" id="joy" type="slider" value="100"
+                                    style="display: none;"><span class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 100%; z-index: 2;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: block;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to" style="display: none;">
+                                                        <span>100</span>&nbsp;%</div>
+                                                    <div class="jslider-value"
+                                                        style="left: auto; margin-left: 0px; right: 0px;">
+                                                        <span>100</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <p>Sadness</p>
+                                <input class="slider emotion" id="sadness" type="slider" value="0"
+                                    style="display: none;"><span class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <p>Anger</p>
+                                <input class="slider emotion" id="anger" type="slider" value="0"
+                                    style="display: none;"><span class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <p>Disgust</p>
+                                <input class="slider emotion" id="disgust" type="slider" value="0"
+                                    style="display: none;"><span class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <p>Fear</p>
+                                <input class="slider emotion" id="fear" type="slider" value="0"
+                                    style="display: none;"><span class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <p>Surprise</p>
+                                <input class="slider emotion" id="surprise" type="slider" value="0"
+                                    style="display: none;"><span class="jslider jslider_round jslider-single">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="jslider-bg"><i class="l"></i><i class="f"></i><i
+                                                            class="r"></i><i class="v"></i></div>
+                                                    <div class="jslider-pointer" style="left: 0%;"></div>
+                                                    <div class="jslider-pointer jslider-pointer-to"></div>
+                                                    <div class="jslider-label" style="display: none;"><span>0</span>
+                                                    </div>
+                                                    <div class="jslider-label jslider-label-to"><span>100</span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-value"
+                                                        style="left: 0%; margin-left: 0px; right: auto;">
+                                                        <span>0</span>&nbsp;%</div>
+                                                    <div class="jslider-value jslider-value-to"><span></span>&nbsp;%
+                                                    </div>
+                                                    <div class="jslider-scale"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="face-wrapper" class="span9">
+                    <canvas id="face" width="700" height="400"> </canvas>
+                    <a id="toggle-muscles" class="btn btn-mini">Toggle muscle view</a>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+        </div>
+    </div>
+    <script src="FaceMotion%20mand3l_files/bootstrap-transition.js"> </script>
+    <script src="FaceMotion%20mand3l_files/bootstrap-modal.js"> </script>
+    <script src="FaceMotion%20mand3l_files/bootstrap-tab.js"> </script>
+    <script src="FaceMotion%20mand3l_files/bootstrap-tooltip.js"> </script>
+    <script src="FaceMotion%20mand3l_files/bootstrap-popover.js"> </script>
+    <script src="FaceMotion%20mand3l_files/bootstrap-button.js"> </script>
+    <script src="FaceMotion%20mand3l_files/bootstrap-affix.js"> </script>
+    <script src="FaceMotion%20mand3l_files/core.js"> </script>
+    <script type="text/javascript" src="FaceMotion%20mand3l_files/jshashtable-2.1_src.js"> </script>
+    <script type="text/javascript" src="FaceMotion%20mand3l_files/jquery.numberformatter-1.2.3.js"> </script>
+    <script type="text/javascript" src="FaceMotion%20mand3l_files/tmpl.js"> </script>
+    <script type="text/javascript" src="FaceMotion%20mand3l_files/jquery.dependClass-0.1.js"> </script>
+    <script type="text/javascript" src="FaceMotion%20mand3l_files/draggable-0.1.js"> </script>
+    <script type="text/javascript" src="FaceMotion%20mand3l_files/jquery.slider.js"> </script>
+    <script type="text/javascript" src="FaceMotion%20mand3l_files/paper.js"> </script>
+    <script type="text/javascript" src="FaceMotion%20mand3l_files/morphologies.js"> </script>
+    <script type="text/javascript" src="FaceMotion%20mand3l_files/face.js"> </script>
+    <script type="text/javascript" src="FaceMotion%20mand3l_files/input.js"> </script>
+    <script type="text/javascript" src="FaceMotion%20mand3l_files/slider-demo.js"> </script>
+    <script>
+        var srcCanvas = document.getElementById('face');
+        function publish_image() {
+            // console.log('Running publish_image')
+            
+            destinationCanvas = document.createElement("canvas");
+            destinationCanvas.width = srcCanvas.width;
+            destinationCanvas.height = srcCanvas.height;
+
+            destCtx = destinationCanvas.getContext('2d');
+
+            //create a rectangle with the desired color
+            destCtx.fillStyle = "#FFFFFF";
+            destCtx.fillRect(0,0,srcCanvas.width,srcCanvas.height);
+
+            //draw the original canvas onto the destination canvas
+            destCtx.drawImage(srcCanvas, 0, 0);
+
+            //finally use the destinationCanvas.toDataURL() method to get the desired output;
+            var data = destinationCanvas.toDataURL('image/jpeg');
+        
+            // var data = canvas.toDataURL('image/jpeg');
+            var imageMessage = new ROSLIB.Message({
+                format : "jpeg",
+                data : data.replace("data:image/jpeg;base64,", "")
+            });
+
+            imageTopic.publish(imageMessage);
+
+        }
+  
+        setInterval(publish_image, 100);
+    </script>
+   
+</body>
+
+</html>

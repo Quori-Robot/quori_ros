@@ -1,0 +1,8 @@
+<launch>
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+
+  <node pkg="quori_face_generator" name="emotion_publisher" type="emotion_publisher.py" output="screen" />
+
+  <node pkg="quori_face_generator" name="image_subscriber" type="image_subscriber.py" output="screen" />
+
+</launch>
