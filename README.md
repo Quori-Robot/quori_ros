@@ -18,8 +18,8 @@ The package is compatible with **Ubuntu 16.04 / ROS Kinetic** and **Ubuntu 20.04
 
 ```
 mkdir quori_files
-ls quori_files
-git clone https://github.com/Quori-ROS/quori_ros.git
+cd quori_files
+git clone https://github.com/CMU-RASL/quori_ros.git
 cd quori_ros
 git submodule init
 sudo apt-get install ros-noetic-sound-play ros-noetic-rgbd-launch ros-noetic-libuvc-camera ros-noetic-libuvc-ros
@@ -40,8 +40,8 @@ source devel/setup.sh
 
 ```
 mkdir quori_files
-ls quori_files
-git clone https://github.com/Quori-ROS/quori_ros.git
+cd quori_files
+git clone https://github.com/CMU-RASL/quori_ros.git
 cd quori_ros
 git submodule init
 sudo apt-get install ros-noetic-sound-play ros-noetic-rgbd-launch ros-noetic-libuvc-camera ros-noetic-libuvc-ros
