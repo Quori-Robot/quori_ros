@@ -205,7 +205,11 @@
       <geometry>
         <sphere radius="0.11" />
       </geometry>
-      <material name="white"/>
+      <!-- <material name="white"/> -->
+      <plugin name="faceplugin" filename="libfaceplugin.so">
+        <height>120</height>
+        <width>240</width>
+      </plugin>
     </visual>
     <visual>
       <origin rpy="0 0 -1.57079632679" xyz="0.01 0 -1.11" />

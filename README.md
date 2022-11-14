@@ -57,10 +57,7 @@ sudo rosdep init
 rosdep update
 rosdep install --from-paths src --ignore-src -r -y
 sudo apt-get install python3-catkin-tools
-
 sudo apt-get install libglfw3 libglfw3-dev
-
-
 catkin config --init
 catkin config --skiplist ros_astra_camera astra_ros quori_face
 catkin_build
@@ -102,6 +99,10 @@ python3 -m http.server 8000
 ```
 
 Open a browser at `http://localhost:8000/FaceMotion mand3l.html`
+
+```
+sudo ln -s /usr/local/include/opencv4/opencv2/ /usr/local/include/opencv2
+```
 
 
 
