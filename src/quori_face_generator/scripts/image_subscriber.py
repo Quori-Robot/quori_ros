@@ -6,7 +6,7 @@ from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import CompressedImage, Image
 import time
 
-pub = rospy.Publisher('sensor_msgs/Image', Image, queue_size=10)
+pub = rospy.Publisher('quori/face/image', Image, queue_size=10)
 
 def callback(data):
     bridge = CvBridge() 
