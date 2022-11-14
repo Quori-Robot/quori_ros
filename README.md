@@ -24,7 +24,12 @@ cd quori_ros
 git submodule init
 sudo apt-get install ros-noetic-sound-play ros-noetic-rgbd-launch ros-noetic-libuvc-camera ros-noetic-libuvc-ros
 sudo apt-get install ros-noetic-ros-control ros-noetic-ros-controllers ros-noetic-gazebo-ros-control
+sudo apt install python3-rosdep
+sudo apt-get install python3-pip
+sudo rosdep init
+rosdep update
 rosdep install --from-paths src --ignore-src -r -y
+sudo apt-get install python3-catkin-tools
 catkin config --init
 catkin_build
 source devel/setup.sh
@@ -46,7 +51,16 @@ cd quori_ros
 git submodule init
 sudo apt-get install ros-noetic-sound-play ros-noetic-rgbd-launch ros-noetic-libuvc-camera ros-noetic-libuvc-ros
 sudo apt-get install ros-noetic-ros-control ros-noetic-ros-controllers ros-noetic-gazebo-ros-control
+sudo apt install python3-rosdep
+sudo apt-get install python3-pip
+sudo rosdep init
+rosdep update
 rosdep install --from-paths src --ignore-src -r -y
+sudo apt-get install python3-catkin-tools
+
+sudo apt-get install libglfw3 libglfw3-dev
+
+
 catkin config --init
 catkin config --skiplist ros_astra_camera astra_ros quori_face
 catkin_build
@@ -83,7 +97,7 @@ Terminal 1: `roslaunch quori_gazebo quori_world.launch`
 
 Terminal 2:
 ```
-cd ~/Documents/GitHub/quori_ros/src/quori_face_generator/gui
+cd src/quori_face_generator/gui
 python3 -m http.server 8000
 ```
 

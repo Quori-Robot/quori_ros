@@ -26,9 +26,9 @@
     <child link="quori/base_link"/>
   </joint>
 
-  <link name="base_link"/>
+  <link name="world"/>
   <joint name="fixed" type="fixed">
-    <parent link="base_link"/>
+    <parent link="world"/>
     <child link="ramsis/wheel_axle"/>
   </joint>
 
