@@ -13,12 +13,12 @@
 
   <arg name="model" default="$(find quori_description)/urdf/quori.xacro'"/>
   
-  <arg name="rvizconfig" default="$(find quori_gazebo)/rviz/quori_world.rviz" />
+  <!-- <arg name="rvizconfig" default="$(find quori_gazebo)/rviz/quori_world.rviz" /> -->
 
   <param name="robot_description" command="xacro '$(arg model)" />
   <param name="quori/robot_description" command="xacro '$(arg model)" />
   
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> -->
 
   <include file="$(find quori_controller)/launch/quori_control_gazebo.launch" />
 

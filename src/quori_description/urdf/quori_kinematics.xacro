@@ -207,6 +207,7 @@
       </geometry>
       <!-- <material name="white"/> -->
       <plugin name="faceplugin" filename="libfaceplugin.so">
+      <robotNamespace>quori</robotNamespace>
         <height>120</height>
         <width>240</width>
       </plugin>
