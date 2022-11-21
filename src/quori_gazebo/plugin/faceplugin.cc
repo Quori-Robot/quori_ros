@@ -159,7 +159,7 @@ void FacePlugin::setupROS(void)
 #ifdef TESTING
 void FacePlugin::setImage(std::string fname)
 {
-  std::string path="/home/robotanist/quori/src/quori/quori_description/models/face_model/materials/textures/";  
+  std::string path="~/quori_files/quori_ros/src/quori_description/models/face_model/materials/textures/";  
   cv::Mat image = cv::imread(path + fname, cv::IMREAD_COLOR);
   std::vector<cv::Mat> channels;
   cv::split(image, channels);

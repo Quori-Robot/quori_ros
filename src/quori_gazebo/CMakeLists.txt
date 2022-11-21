@@ -41,6 +41,4 @@ include_directories(${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS}
 # ${catkin_INCLUDE_DIRS}
 )
 
-
-
 add_subdirectory(plugin)

@@ -201,24 +201,37 @@
       <inertia ixx="0.008"  ixy="0"  ixz="0" iyy="0.0056" iyz="0" izz="0.0056" />
     </inertial>
     <visual>
-      <origin xyz="0 0 0.085" />
-      <geometry>
-        <sphere radius="0.11" />
-      </geometry>
-      <!-- <material name="white"/> -->
-      <plugin name="faceplugin" filename="libfaceplugin.so">
-      <robotNamespace>quori</robotNamespace>
-        <height>120</height>
-        <width>240</width>
-      </plugin>
-    </visual>
-    <visual>
       <origin rpy="0 0 -1.57079632679" xyz="0.01 0 -1.11" />
       <geometry>
         <mesh filename="package://quori_description/meshes/0917_Helmet_Duripod.dae" />
       </geometry>
     </visual>
   </link>
+
+  <link name="quori/face">
+    <visual>
+      <origin xyz="0 0 0.085" />
+      <geometry>
+        <sphere radius="0.1" />
+      </geometry>
+      <material name="white" />
+    </visual>
+  </link>
+  
+  <joint name="head_swivel" type="fixed">
+    <parent link="quori/head" />
+    <child link="quori/face" />
+  </joint>
+
+  <gazebo reference="quori/face">
+    <visual>
+      <plugin name="faceplugin" filename="libfaceplugin.so">
+      <robotNamespace>quori</robotNamespace>
+        <height>120</height>
+        <width>240</width>
+      </plugin>
+    </visual>
+  </gazebo>
 
   <joint name="neck" type="fixed">
     <origin xyz="0 0 0.554" rpy="0 0 0" />

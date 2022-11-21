@@ -25,7 +25,7 @@ int main (int argc, char **argv)
   ros::NodeHandle rosnode;
 
   ros::Publisher image_pub =
-    rosnode.advertise<sensor_msgs::Image>("quori/face_image", 1);
+    rosnode.advertise<sensor_msgs::Image>("quori/face_plugin_image", 1);
   std::vector<sensor_msgs::ImagePtr> ros_images;
 
   for (int i=0; i<num_images; i++) {
@@ -42,7 +42,7 @@ int main (int argc, char **argv)
   }
 
 #if 0
-    std::string path="/home/robotanist/quori/src/quori/quori_description/models/face_model/materials/textures/";  
+    std::string path="~/quori_files/quori_ros/src/quori_description/models/face_model/materials/textures/";  
     std::cerr << "HERE0" << std::endl;
     cv_bridge::CvImage *ros_image = new cv_bridge::CvImage;
     ros_image->image = cv::imread(path + "dog.jpg");
