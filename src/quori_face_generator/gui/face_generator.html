@@ -43,13 +43,13 @@
 
         var imageTopic = new ROSLIB.Topic({
             ros : ros,
-            name : '/face_image',
+            name : 'quori/face_generator_image',
             messageType : 'sensor_msgs/CompressedImage'
         });
 
         var listener = new ROSLIB.Topic({
             ros : ros,
-            name : '/emotion',
+            name : 'quori/face_generator_emotion',
             messageType : 'std_msgs/Float64MultiArray'
         });
 

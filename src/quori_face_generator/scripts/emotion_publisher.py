@@ -4,7 +4,7 @@ import os
 from std_msgs.msg import Float64MultiArray
 
 def talker():
-    pub = rospy.Publisher('emotion', Float64MultiArray, queue_size=10)
+    pub = rospy.Publisher('quori/face_generator_emotion', Float64MultiArray, queue_size=10)
     rospy.init_node('emotion_publisher', anonymous=True)
     rate = rospy.Rate(10) # 10hz
     #joy, sadness, anger, disgust, fear, surprise

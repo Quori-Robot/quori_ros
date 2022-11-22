@@ -25,7 +25,7 @@ int main (int argc, char **argv)
   ros::NodeHandle rosnode;
 
   ros::Publisher image_pub =
-    rosnode.advertise<sensor_msgs::Image>("quori/face_plugin_image", 1);
+    rosnode.advertise<sensor_msgs::Image>("quori/face/image", 1);
   std::vector<sensor_msgs::ImagePtr> ros_images;
 
   for (int i=0; i<num_images; i++) {

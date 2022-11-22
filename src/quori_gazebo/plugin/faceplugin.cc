@@ -173,7 +173,7 @@ void FacePlugin::setImage(std::string fname)
 // Set up an initial white face
 void FacePlugin::initImage(int width, int height)
 {
-  cv::Mat white(width, height, CV_8UC4, cv::Scalar(255, 255, 255));
+  cv::Mat white(width, height, CV_8UC3, cv::Scalar(255, 255, 255));
   this->image_->image = white;
   this->new_image_available_ = true;
 }
@@ -237,29 +237,28 @@ void FacePlugin::Load(VisualPtr visual, sdf::ElementPtr sdf)
 		   "defaults to \"%s\".", robot_namespace_.c_str());
   }
 
-  topic_name_ = (!p_sdf->HasElement("topicName") ? "face_plugin_image" :
+  topic_name_ = (!p_sdf->HasElement("topicName") ? "face/image" :
 		 p_sdf->GetElement("topicName")->Get<std::string>());
   if (!p_sdf->HasElement("topicName")) {
     ROS_WARN_NAMED("video", "Face Plugin (ns = %s) missing <topicName>, "
 		   "defaults to \"%s\".", robot_namespace_.c_str(), topic_name_.c_str());
   }
-  int height = (!p_sdf->HasElement("height") ? 240 :
+  int height = (!p_sdf->HasElement("height") ? 700 :
 		p_sdf->GetElement("height")->Get<int>());
   if (!p_sdf->HasElement("height")) {
     ROS_WARN_NAMED("video", "Face Plugin (ns = %s) missing <height>, "
 		   "defaults to %i.", robot_namespace_.c_str(), height);
   }
 
-  int width = (!p_sdf->HasElement("width") ? 320 :
+  int width = (!p_sdf->HasElement("width") ? 400 :
 	       p_sdf->GetElement("width")->Get<int>()); 
   if (!p_sdf->HasElement("width")) {
     ROS_WARN_NAMED("video", "Face Plugin (ns = %s) missing <width>, "
 		   "defaults to %i", robot_namespace_.c_str(), width);
   }
-
+ 
   std::string name = robot_namespace_ + "_visual";
   video_visual_.reset(new VideoVisual(name, visual, height, width));
-
   setupROS();
 
 #ifdef TESTING
