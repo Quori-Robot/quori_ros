@@ -237,20 +237,20 @@ void FacePlugin::Load(VisualPtr visual, sdf::ElementPtr sdf)
 		   "defaults to \"%s\".", robot_namespace_.c_str());
   }
 
-  topic_name_ = (!p_sdf->HasElement("topicName") ? "face/image" :
+  topic_name_ = (!p_sdf->HasElement("topicName") ? "gazebo_face/image" :
 		 p_sdf->GetElement("topicName")->Get<std::string>());
   if (!p_sdf->HasElement("topicName")) {
     ROS_WARN_NAMED("video", "Face Plugin (ns = %s) missing <topicName>, "
 		   "defaults to \"%s\".", robot_namespace_.c_str(), topic_name_.c_str());
   }
-  int height = (!p_sdf->HasElement("height") ? 700 :
+  int height = (!p_sdf->HasElement("height") ? 120 :
 		p_sdf->GetElement("height")->Get<int>());
   if (!p_sdf->HasElement("height")) {
     ROS_WARN_NAMED("video", "Face Plugin (ns = %s) missing <height>, "
 		   "defaults to %i.", robot_namespace_.c_str(), height);
   }
 
-  int width = (!p_sdf->HasElement("width") ? 400 :
+  int width = (!p_sdf->HasElement("width") ? 240 :
 	       p_sdf->GetElement("width")->Get<int>()); 
   if (!p_sdf->HasElement("width")) {
     ROS_WARN_NAMED("video", "Face Plugin (ns = %s) missing <width>, "
