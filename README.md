@@ -37,7 +37,7 @@ sudo apt-get install ros-noetic-ros-control ros-noetic-ros-controllers ros-noeti
 sudo apt-get install python3-catkin-tools
 sudo apt-get install python3-pip
 sudo apt-get install libglfw3 libglfw3-dev
-sudo apt install ros-noetic-rqt-joint-trajectory-controller
+sudo apt-get install ros-noetic-rqt-joint-trajectory-controller
 rosdep update
 rosdep install --from-paths src --ignore-src -r -y
 ```
