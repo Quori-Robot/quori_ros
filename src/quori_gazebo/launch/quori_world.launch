@@ -7,7 +7,7 @@
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
     <arg name="headless" value="false"/>
-    <arg name="verbose" value="true" />
+    <arg name="verbose" value="false" />
   </include>
 
   <arg name="model" default="$(find quori_description)/urdf/quori.xacro'"/>
@@ -22,5 +22,7 @@
   <include file="$(find quori_controller)/launch/quori_control_gazebo.launch" />
 
   <include file="$(find quori_face_generator)/launch/websocket.launch" />
+
+  <node pkg="quori_gazebo" name="behavior_publisher" type="emotional_behavior.py" output="screen" />
 
 </launch>

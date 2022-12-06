@@ -12,7 +12,7 @@
 
   <gui>
     <camera name="user_camera">
-      <pose>3.97 0.022 0.47 0 0 3.14</pose>
+      <pose>3.57 -0.03 0.67 0 0 3.14</pose>
     </camera>
   </gui>
   </world>

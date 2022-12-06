@@ -53,13 +53,18 @@
             messageType : 'std_msgs/Float64MultiArray'
         });
         var emotion_arr = ['joy', 'sadness', 'anger', 'disgust', 'fear', 'surprise'];
+        var val;
+        var current_val;
 
         listener.subscribe(function(message) {
             console.log('Received message on ' + listener.name + ': ' + message.data);
             
             emotion_arr.forEach( function(emotion, index) {
-                if (($('#' + emotion).slider('value') - Math.round(message.data[index]*100)) < 1) {
-                    $('#' + emotion).slider('value', Math.round(message.data[index]*100).toString());
+                val = Math.round(message.data[index]*100);
+                current_val = $('#' + emotion).slider('value');
+                console.log(current_val, val);
+                if (Math.abs(current_val - val) > 1) {
+                    $('#' + emotion).slider('value', val.toString());
                 }
             });
         });
