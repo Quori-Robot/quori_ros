@@ -1,0 +1,29 @@
+<launch>
+     <arg name="hardware" default="false" />
+
+     <include file="$(find gazebo_ros)/launch/empty_world.launch">
+          <arg name="world_name" value="$(find quori_gazebo)/worlds/empty.world" />
+          <arg name="debug" value="false" />
+          <arg name="gui" value="true" />
+          <arg name="paused" value="false" />
+          <arg name="use_sim_time" value="true" />
+          <arg name="headless" value="false" />
+          <arg name="verbose" value="false" />
+     </include>
+
+     <arg name="model" default="$(find quori_description)/urdf/quori.xacro'" />
+     <param name="robot_description" command="xacro '$(arg model)" />
+     <param name="quori/robot_description" command="xacro '$(arg model)" />
+
+
+     <include file="$(find quori_controller)/launch/quori_control_diff.launch">
+          <arg name="hardware" value="$(arg hardware)" />
+     </include>
+
+     <include file="$(find quori_face_generator)/launch/websocket.launch" />
+
+     <node pkg="quori_gazebo" name="behavior_publisher" type="emotional_behavior.py" output="screen" />
+
+     <!-- <include file="$(find quori_face)/launch/quori_face.launch" /> -->
+
+</launch>
